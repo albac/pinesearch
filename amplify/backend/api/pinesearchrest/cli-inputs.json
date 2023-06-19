@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "paths": {
+    "/checkurl": {
+      "name": "/checkurl",
+      "lambdaFunction": "PinesearchCheckURL",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/blogcreator": {
+      "name": "/blogcreator",
+      "lambdaFunction": "PinesearchBlogCreator",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

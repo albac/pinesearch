@@ -19,6 +19,14 @@
         "S3Triggera84e359f": {
           "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
           "s3Key": "amplify-builds/S3Triggera84e359f-684544372b6561495571-build.zip"
+        },
+        "PinesearchCheckURL": {
+          "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
+          "s3Key": "amplify-builds/PinesearchCheckURL-654a6b6e6c3569773050-build.zip"
+        },
+        "PinesearchBlogCreator": {
+          "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
+          "s3Key": "amplify-builds/PinesearchBlogCreator-47545461505371736c43-build.zip"
         }
       },
       "storage": {
@@ -29,6 +37,10 @@
           "appId": "d6qm6fb1j4see",
           "type": "cicd"
         }
+      },
+      "api": {
+        "pinesearch": {},
+        "pinesearchrest": {}
       }
     }
   }
