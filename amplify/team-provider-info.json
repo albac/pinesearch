@@ -1,0 +1,29 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pinesearch-dev-101145-authRole",
+      "UnauthRoleArn": "arn:aws:iam::849514089141:role/amplify-pinesearch-dev-101145-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::849514089141:role/amplify-pinesearch-dev-101145-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
+      "UnauthRoleName": "amplify-pinesearch-dev-101145-unauthRole",
+      "StackName": "amplify-pinesearch-dev-101145",
+      "StackId": "arn:aws:cloudformation:us-west-2:849514089141:stack/amplify-pinesearch-dev-101145/51b384e0-0eab-11ee-9949-0ae729ac6ff3",
+      "AmplifyAppId": "d6qm6fb1j4see"
+    },
+    "categories": {
+      "auth": {
+        "pinesearchc776f9f1": {}
+      },
+      "function": {
+        "S3Triggera84e359f": {
+          "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
+          "s3Key": "amplify-builds/S3Triggera84e359f-684544372b6561495571-build.zip"
+        }
+      },
+      "storage": {
+        "pineblogs": {}
+      }
+    }
+  }
+}
