@@ -23,6 +23,12 @@
       },
       "storage": {
         "pineblogs": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d6qm6fb1j4see",
+          "type": "cicd"
+        }
       }
     }
   }
