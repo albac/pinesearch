@@ -138,6 +138,22 @@
         }
       ]
     },
+    "AMPLIFY_function_PinesearchCheckURL_searchEngineId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PinesearchCheckURL"
+        }
+      ]
+    },
+    "AMPLIFY_function_PinesearchCheckURL_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PinesearchCheckURL"
+        }
+      ]
+    },
     "AMPLIFY_function_S3Triggera84e359f_deploymentBucketName": {
       "usedBy": [
         {
