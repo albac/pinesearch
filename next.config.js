@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    appDir: true,
-  },
   env: {
     USER_BRANCH: process.env.USER_BRANCH,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
