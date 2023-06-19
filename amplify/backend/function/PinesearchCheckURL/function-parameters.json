@@ -1,0 +1,12 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "searchEngineId",
+      "environmentVariableName": "SEARCH_ENGINE_ID"
+    }
+  ],
+  "secretNames": [
+    "GOOGLE_API_KEY"
+  ]
+}

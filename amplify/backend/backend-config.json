@@ -20,6 +20,28 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync"
+    },
+    "pinesearchrest": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "PinesearchCheckURL"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "PinesearchBlogCreator"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
@@ -51,6 +73,25 @@
     }
   },
   "function": {
+    "PinesearchBlogCreator": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "pineblogs"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "PinesearchCheckURL": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "S3Triggera84e359f": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -65,6 +106,54 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_PinesearchBlogCreator_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PinesearchBlogCreator"
+        }
+      ]
+    },
+    "AMPLIFY_function_PinesearchBlogCreator_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PinesearchBlogCreator"
+        }
+      ]
+    },
+    "AMPLIFY_function_PinesearchCheckURL_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PinesearchCheckURL"
+        }
+      ]
+    },
+    "AMPLIFY_function_PinesearchCheckURL_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PinesearchCheckURL"
+        }
+      ]
+    },
+    "AMPLIFY_function_PinesearchCheckURL_searchEngineId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PinesearchCheckURL"
+        }
+      ]
+    },
+    "AMPLIFY_function_PinesearchCheckURL_secretsPathAmplifyAppId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "PinesearchCheckURL"
+        }
+      ]
+    },
     "AMPLIFY_function_S3Triggera84e359f_deploymentBucketName": {
       "usedBy": [
         {
