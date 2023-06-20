@@ -1,4 +1,4 @@
-import { getMdxData, getMdxItems } from "@/helpers";
+import { getMdxData, getMdxItems } from "../../helpers";
 import { MdxRemoteClient } from "./MdxRemoteClient";
 // import { Post } from "@/models";
 // import { SortDirection, withSSRContext } from "aws-amplify";
