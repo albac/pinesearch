@@ -4,6 +4,9 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
+export { default as SearchResult } from "./SearchResult";
+export { default as NavBar } from "./NavBar";
+export { default as SearchBar } from "./SearchBar";
 export { default as studioTheme } from "./studioTheme";
 export { default as PostUpdateForm } from "./PostUpdateForm";
 export { default as PostCreateForm } from "./PostCreateForm";

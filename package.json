@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "5.0.1",
-    "@pinecone-database/pinecone": "^0.1.6",
+    "@aws-amplify/ui-react": "4.6.4",
     "@clerk/nextjs": "^4.21.6",
+    "@pinecone-database/pinecone": "^0.1.6",
     "@types/node": "20.3.1",
     "@types/react": "18.2.13",
     "@types/react-dom": "18.2.6",

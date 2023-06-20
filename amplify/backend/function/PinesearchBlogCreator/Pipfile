@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 src = {editable = true, path = "./src"}
+langchain = "==0.0.137"
+urllib3 = "==1.26.6"
 
 [requires]
 python_version = "3.8"

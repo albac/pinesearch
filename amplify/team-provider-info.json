@@ -28,7 +28,7 @@
         },
         "PinesearchBlogCreator": {
           "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
-          "s3Key": "amplify-builds/PinesearchBlogCreator-2b6f2f42776f36787649-build.zip"
+          "s3Key": "amplify-builds/PinesearchBlogCreator-355a6b7a645874764e6f-build.zip"
         }
       },
       "storage": {
