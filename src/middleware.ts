@@ -1,7 +1,14 @@
 import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 // import { getLastPath } from "./helpers";
 
-const publicRoutes = ["/", "/auth/sign-in", "/auth/sign-up", "/auth/sign-out"];
+const publicRoutes = [
+  "/",
+  "/blog",
+  "/blog/:slug",
+  "/auth/sign-in",
+  "/auth/sign-up",
+  "/auth/sign-out"
+];
 // const privateRoutes = ["/example-private"];
 
 export default authMiddleware({
