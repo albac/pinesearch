@@ -1,6 +1,12 @@
+"use client";
+
+import { useState } from "react";
 import SearchForm from "./SearchForm";
+import SearchModal from "./SearchModal";
 
 export default function Home() {
+  const [showSearchModal, setSearchModal] = useState(false);
+
   return (
     <main
       style={{
@@ -8,7 +14,8 @@ export default function Home() {
       }}
       className="mx-auto w-11/12 text-center py-5 flex justify-center items-center"
     >
-      <SearchForm />
+      <SearchForm openModal={() => setSearchModal(true)} />
+      { showSearchModal && <SearchModal /> }
     </main>
   );
 }

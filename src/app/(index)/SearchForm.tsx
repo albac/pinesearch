@@ -2,13 +2,18 @@
 
 import { useRouter } from "next/navigation";
 
-export default function SearchForm() {
+interface IProps {
+  openModal: () => void
+}
+
+export default function SearchForm({openModal}: IProps) {
   const router = useRouter();
 
   const onSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/blog");
+    openModal();
   };
+  
   return (
     <form onSubmit={onSubmitForm}>
       <h1 className="text-5xl font-bold">PineSearch</h1>
