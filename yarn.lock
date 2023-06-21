@@ -218,6 +218,18 @@
     lodash "4.17.21"
     xstate "^4.33.6"
 
+"@aws-amplify/ui-react-storage@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.npmjs.org/@aws-amplify/ui-react-storage/-/ui-react-storage-2.0.1.tgz"
+  integrity sha512-K136hw2tnexagNiz7CIYtnzp3hJIbnckm7meFXdjU70I2jN6uVxWrDNYjcbLq5PzyAiJNMUKfW3aI+QFjC9XTQ==
+  dependencies:
+    "@aws-amplify/ui" "5.6.4"
+    "@aws-amplify/ui-react" "5.0.1"
+    "@aws-amplify/ui-react-core" "2.1.23"
+    classnames "2.3.1"
+    lodash "4.17.21"
+    tslib "2.4.1"
+
 "@aws-amplify/ui-react@5.0.1":
   version "5.0.1"
   resolved "https://registry.npmjs.org/@aws-amplify/ui-react/-/ui-react-5.0.1.tgz"
@@ -10347,6 +10359,11 @@ prelude-ls@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
+
+prettier@^2.8.8:
+  version "2.8.8"
+  resolved "https://registry.npmjs.org/prettier/-/prettier-2.8.8.tgz"
+  integrity sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==
 
 pretty-format@^26.5.2, pretty-format@^26.6.2:
   version "26.6.2"
