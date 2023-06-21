@@ -9,12 +9,26 @@ from langchain.prompts import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from transformers import GPT2TokenizerFast
 from langchain.text_splitter import TokenTextSplitter
+from dotenv import load_dotenv
+import langchain
+import io
+import urllib.request
+import PyPDF2
+langchain.debug
+
+
+load_dotenv()
 
 # Load PDF File
 
-pdf_file = "./doc.pdf"
-
-loader = PyPDFLoader(pdf_file)
+PDFURL=os.getenv('PDFURL')
+#pdf_file = "./doc.pdf"
+# URL = PDFURL
+# req = urllib.request.Request(URL, headers={'User-Agent' : "Magic Browser"})
+# remote_file = urllib.request.urlopen(req).read()
+# remote_file_bytes = io.BytesIO(remote_file)
+# pdfdoc_remote = PyPDF2.PdfFileReader(remote_file_bytes)
+loader = PyPDFLoader(PDFURL)
 pages = loader.load_and_split()
 
 # Strip unwanted padding
@@ -35,8 +49,8 @@ for page in pages:
 print('Total token count: ', total_count)
 
 
-pinecone_api_key = os.getenv("PINECONE_API_KEY", "")
-pinecone_env = os.getenv("PINECONE_ENVIRONMENT", "")
+pinecone_api_key = os.environ["PINECONE_API_KEY"]
+pinecone_env =os.environ["PINECONE_ENV"]
 pinecone_index = "summarize1"
 
 pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
@@ -54,7 +68,7 @@ vectordb = Pinecone.from_documents(pages, embeddings, index_name=pinecone_index)
 
 print('Pinecone vector created!')
 
-llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
+llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0.7)
 
 prompt_template = """Write a long summary with subtitles.
 Remember the date of publication if exist for the nex prompt.
@@ -91,6 +105,7 @@ chain = load_summarize_chain(
 print('Chain created!')
 
 search = vectordb.similarity_search(" ")
+print(search)
 
 print('Vectordb similarity search done!')
 
