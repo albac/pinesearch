@@ -1,0 +1,77 @@
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores.pinecone import Pinecone
+from langchain.chains.summarize import load_summarize_chain
+import os
+import pinecone
+from langchain.prompts import PromptTemplate
+from langchain.chat_models import ChatOpenAI
+from transformers import GPT2TokenizerFast
+import logging
+
+
+logger = logging.getLogger("uvicorn")
+logger.setLevel(logging.INFO)
+logger.addHandler(logging.StreamHandler())
+
+
+def get_token_count(pages):
+    tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
+    total_count = 0
+
+    for page in pages:
+        token_count = len(tokenizer.encode(page.page_content))
+        logger.info(f"Page {page.metadata['page']} has {token_count} tokens.")
+        total_count += token_count
+
+    logger.info('Total token count: ', total_count)
+
+    return total_count
+
+def get_blog_output(pages, prompt_template, prompt_template_combined):
+
+    pinecone_api_key = os.getenv("PINECONE_API_KEY", "")
+    pinecone_env = os.getenv("PINECONE_ENVIRONMENT", "")
+    pinecone_index = "summarize1"
+    
+    pinecone.init(api_key=pinecone_api_key, environment=pinecone_env)
+    index = pinecone.Index(pinecone_index)
+    logger.info('Deleting pinecone index!')
+
+    index.delete(deleteAll='true')
+
+    logger.info('Pinecone index deleted!')
+
+    embeddings = OpenAIEmbeddings()
+    vectordb = Pinecone.from_documents(pages, embeddings, index_name=pinecone_index)
+
+    logger.info('Pinecone vector created!')
+
+    llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
+
+    PROMPT = PromptTemplate(template=prompt_template,
+                        input_variables=["text"])
+
+    PROMPT_COMBINED = PromptTemplate(template=prompt_template_combined,
+                        input_variables=["text"])
+
+    chain = load_summarize_chain(
+        llm,
+        chain_type="map_reduce",
+        map_prompt=PROMPT,
+        combine_prompt=PROMPT_COMBINED)
+
+    logger.info('Chain created!')
+
+    search = vectordb.similarity_search(" ")
+
+    logger.info('Vectordb similarity search done!')
+
+    summary = chain({"input_documents": search}, return_only_outputs=True)
+
+    logger.info('Summary chain completed')
+
+    logger.info('Blog created: ', summary['output_text'])
+
+    index.delete(deleteAll='true')
+
+    return summary['output_text']

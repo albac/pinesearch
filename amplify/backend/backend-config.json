@@ -1,5 +1,202 @@
 {
   "api": {
+    "pinecontainer": {
+      "apiType": "REST",
+      "build": true,
+      "categoryPolicies": [
+        {
+          "Action": "s3:ListBucket",
+          "Effect": "Allow",
+          "Resource": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:s3:::",
+                  {
+                    "Ref": "storagepineblogsBucketName"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Action": [
+            "s3:PutObject",
+            "s3:GetObject",
+            "s3:DeleteObject"
+          ],
+          "Effect": "Allow",
+          "Resource": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:s3:::",
+                  {
+                    "Ref": "storagepineblogsBucketName"
+                  },
+                  "/*"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Action": [
+            "dynamodb:Put*",
+            "dynamodb:Create*",
+            "dynamodb:BatchWriteItem",
+            "dynamodb:Get*",
+            "dynamodb:BatchGetItem",
+            "dynamodb:List*",
+            "dynamodb:Describe*",
+            "dynamodb:Scan",
+            "dynamodb:Query",
+            "dynamodb:Update*",
+            "dynamodb:RestoreTable*",
+            "dynamodb:Delete*"
+          ],
+          "Effect": "Allow",
+          "Resource": [
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::ImportValue": {
+                      "Fn::Sub": "${apipinesearchGraphQLAPIIdOutput}:GetAtt:PostTable:Name"
+                    }
+                  }
+                ]
+              ]
+            },
+            {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::ImportValue": {
+                      "Fn::Sub": "${apipinesearchGraphQLAPIIdOutput}:GetAtt:PostTable:Name"
+                    }
+                  },
+                  "/index/*"
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "dependsOn": [
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "pineblogs"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "pinesearch"
+        },
+        {
+          "attributes": [
+            "ClusterName",
+            "VpcId",
+            "VpcCidrBlock",
+            "SubnetIds",
+            "VpcLinkId",
+            "CloudMapNamespaceId"
+          ],
+          "category": "",
+          "resourceName": "NetworkStack"
+        }
+      ],
+      "deploymentMechanism": "FULLY_MANAGED",
+      "environmentMap": {
+        "API_PINESEARCH_GRAPHQLAPIIDOUTPUT": {
+          "Ref": "apipinesearchGraphQLAPIIdOutput"
+        },
+        "API_PINESEARCH_POSTTABLE_ARN": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:dynamodb:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":table/",
+              {
+                "Fn::ImportValue": {
+                  "Fn::Sub": "${apipinesearchGraphQLAPIIdOutput}:GetAtt:PostTable:Name"
+                }
+              }
+            ]
+          ]
+        },
+        "API_PINESEARCH_POSTTABLE_NAME": {
+          "Fn::ImportValue": {
+            "Fn::Sub": "${apipinesearchGraphQLAPIIdOutput}:GetAtt:PostTable:Name"
+          }
+        },
+        "STORAGE_PINEBLOGS_BUCKETNAME": {
+          "Ref": "storagepineblogsBucketName"
+        }
+      },
+      "iamAccessUnavailable": true,
+      "imageSource": {
+        "type": "CUSTOM"
+      },
+      "mutableParametersState": {
+        "permissions": {
+          "storage": {
+            "Post:@model(appsync)": [
+              "create",
+              "read",
+              "update",
+              "delete"
+            ],
+            "pineblogs": [
+              "create",
+              "read",
+              "update",
+              "delete"
+            ]
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "resourceName": "pinecontainer",
+      "restrictAccess": false,
+      "service": "ElasticContainer",
+      "skipHashing": false
+    },
     "pinesearch": {
       "dependsOn": [],
       "output": {
@@ -103,88 +300,6 @@
       "lastPushTimeStamp": "2023-06-19T15:15:01.240Z",
       "service": "amplifyhosting",
       "type": "cicd"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_function_PinesearchBlogCreator_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "PinesearchBlogCreator"
-        }
-      ]
-    },
-    "AMPLIFY_function_PinesearchBlogCreator_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "PinesearchBlogCreator"
-        }
-      ]
-    },
-    "AMPLIFY_function_PinesearchCheckURL_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "PinesearchCheckURL"
-        }
-      ]
-    },
-    "AMPLIFY_function_PinesearchCheckURL_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "PinesearchCheckURL"
-        }
-      ]
-    },
-    "AMPLIFY_function_PinesearchCheckURL_searchEngineId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "PinesearchCheckURL"
-        }
-      ]
-    },
-    "AMPLIFY_function_PinesearchCheckURL_secretsPathAmplifyAppId": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "PinesearchCheckURL"
-        }
-      ]
-    },
-    "AMPLIFY_function_S3Triggera84e359f_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "S3Triggera84e359f"
-        }
-      ]
-    },
-    "AMPLIFY_function_S3Triggera84e359f_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "S3Triggera84e359f"
-        }
-      ]
-    },
-    "AMPLIFY_hosting_amplifyhosting_appId": {
-      "usedBy": [
-        {
-          "category": "hosting",
-          "resourceName": "amplifyhosting"
-        }
-      ]
-    },
-    "AMPLIFY_hosting_amplifyhosting_type": {
-      "usedBy": [
-        {
-          "category": "hosting",
-          "resourceName": "amplifyhosting"
-        }
-      ]
     }
   },
   "storage": {

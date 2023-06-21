@@ -29,12 +29,19 @@ PDFURL=os.getenv('PDFURL')
 # remote_file_bytes = io.BytesIO(remote_file)
 # pdfdoc_remote = PyPDF2.PdfFileReader(remote_file_bytes)
 loader = PyPDFLoader(PDFURL)
+
+# Load PDF File
+
+PDF_URL = os.getenv("PDF_URL", "")
+
+loader = PyPDFLoader(PDF_URL)
 pages = loader.load_and_split()
 
+
 # Strip unwanted padding
-for page in pages:
-    del page.lc_kwargs
-    page.page_content=("".join((page.page_content.split('\xa0'))))
+# for page in pages:
+#    del page.lc_kwargs
+#    page.page_content=("".join((page.page_content.split('\xa0'))))
 
 
 tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")

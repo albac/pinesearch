@@ -1,0 +1,28 @@
+FROM python:3.8
+
+MAINTAINER "albac"
+
+ENV PINECONE_API_KEY XXX
+ENV PINECONE_ENVIRONMENT us-west4-gcp-free
+ENV OPENAI_API_KEY XXX
+ENV PDF_URL XXX
+ENV API_PINESEARCH_GRAPHQLAPIIDOUTPUT XXXXX
+ENV API_PINESEARCH_POSTTABLE_ARN XXXX
+ENV API_PINESEARCH_POSTTABLE_NAME XXXX
+ENV STORAGE_PINEBLOGS_BUCKETNAME XXXXX
+ENV PROMPT_TEMPlATE XXXXX
+ENV PROMPT_TEMPLATE_COMBINED XXXXX
+ENV LOG_LEVEL debug
+
+WORKDIR /usr/src
+
+# Copy and install dependencies first to reuse cache more often
+COPY ./requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY ./app .
+
+EXPOSE 80
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
