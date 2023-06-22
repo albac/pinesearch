@@ -20,14 +20,14 @@ pipe = StableDiffusionPipeline.from_pretrained(
 pipe = pipe.to(device)
 
 
-def text_to_image(summary, image_name):
+def text_to_image(prompt, save_as):
 
     # Create an instance of the S3 client
     s3 = boto3.client('s3',
                       aws_access_key_id=AWS_ACCESS_KEY_ID,
                       aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 
-    image_name = '-'.join(image_name.split()) + ".webp"
+    image_name = '-'.join(save_as.split()) + ".webp"
 
     def save_image_to_s3(image):
         # Create a BytesIO object to store the image.
@@ -41,14 +41,14 @@ def text_to_image(summary, image_name):
         # Upload the image to the S3 bucket
         s3.upload_fileobj(image_buffer, S3_BUCKET_NAME, s3_key)
 
-    def generator_image(summary):
-        prompt = summary
+    def generator_image(prompt):
+        prompt = prompt
         image = pipe(prompt).images[0]
 
         # Save the image in S3
         save_image_to_s3(image)
 
-    generator_image(summary)
+    generator_image(prompt)
     return image_name
 
 
