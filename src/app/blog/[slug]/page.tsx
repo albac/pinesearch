@@ -68,7 +68,29 @@ export default async function blogPage({ params }: BlogPageParams) {
             src={imageSrc}
             alt={`ia-image by ${params.slug}`}
           />
-          <article className="prose py-8 px-16">
+          <article
+            className="
+          prose
+          prose-headings:leading-tight
+          prose-h1:text-3xl
+          prose-h1:mb-10
+          prose-h2:text-[27px]
+          prose-h2:my-[10px]
+          prose-p:m-0
+          prose-p:mb-4
+          prose-p:text-lg 
+          lg:prose-p:text-xl
+          lg:prose-p:mb-5
+          md:prose-h1:text-4xl
+          lg:prose-h2:text-3xl
+          lg:prose-h1:text-5xl
+          py-4
+          px-8
+          md:py-6
+          md:px-12
+          lg:py-8
+          lg:px-16"
+          >
             <MDXRemote source={mdxSource} />
           </article>
         </section>
