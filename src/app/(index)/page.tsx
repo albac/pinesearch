@@ -15,7 +15,7 @@ export default function Home() {
       className="mx-auto w-11/12 text-center py-5 flex justify-center items-center"
     >
       <SearchForm openModal={() => setSearchModal(true)} />
-      { showSearchModal && <SearchModal /> }
+      { showSearchModal && <SearchModal closeModal={() => setSearchModal(false)}  /> }
     </main>
   );
 }

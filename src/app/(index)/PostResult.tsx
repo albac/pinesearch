@@ -1,8 +1,13 @@
-import Image from "next/image"
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function PostResult() {
+    const router = useRouter();
+
     return (
-        <div className="w-5/6 mb-4 px-8 flex items-center cursor-pointer">
+        <div 
+            className="w-5/6 mb-4 px-8 flex items-center cursor-pointer"
+            onClick={() => router.push('/blog/test')}>
             <div className="h-24 w-24 relative">
                 <Image 
                     src="/dummy-post.png" 

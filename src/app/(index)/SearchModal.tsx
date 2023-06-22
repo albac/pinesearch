@@ -1,58 +1,73 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import SearchModalFooter from "./SearchModalFooter";
-import PostResult from "./PostResult";
+import SearchResult from "./SearchResult";
+import Selection from "./SearchSelection";
 import PulseLoader from "react-spinners/PulseLoader";
 
-interface ISelectionProps {
-    text: string
-}
-
+/*
+    Default search choices for the user.
+*/
 const defaultSelections = [
     "What does the future of quantum computing look like?",
     "What is the nature of consciousness, and how does it arise in the brain?",
-    "What are the cultural, and psychological factors that influence human behavior"
+    "What are the cultural, and psychological factors that influence human behavior?"
 ]
 
-const Selection = ({ text }: ISelectionProps) => {
-    return (
-        <div className="flex px-6 bg-slate-100 rounded-3xl w-1/2 h-24 items-center justify-between mb-4 cursor-pointer">
-            <p className="text-left w-3/4">{text}</p>
-            <div className="rounded-full bg-black h-8 w-8 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#fff" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-                </svg>
-            </div>
-        </div>
-    )
+interface ISearchModalProps {
+    closeModal: () => void;
 }
 
-export default function SearchModal() {
-    // const [query, setQuery] = useState("What is neuroscience?");
+export default function SearchModal({ closeModal }: ISearchModalProps) {
     const [query, setQuery] = useState("");
     const [queries, setQueries] = useState<Array<string>>([]);
-    // const [result, setResult] = useState<string | null>(" Neuroscience is the scientific study of the nervous system, including the brain, spinal cord, and peripheral nerves. It focuses on how the nervous system develops, is structured, and what it does. It also studies the related functions of cognition, emotion, and behavior.");
     const [result, setResult] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmitSearch = async () => {
+    /*
+        Update the search state
+        @param result - the answer to the query from pinecone
+        @param currentQuery -  the current query of the user
+    */
+    const updateSearchState = (result: string, currentQuery: string) => {
+        setResult(result);
+            
+        const updatedQueries = [...queries, currentQuery];
+        setQueries(updatedQueries);
+        setQuery("");
+        setIsLoading(false);
+    }
+
+    /*
+        Submit a search to pinecone. A user can either enter a query
+        or choose one of the example searches. If they click on an example 
+        search the text will be passed to onSubmitSearch.
+
+        @param text - optional - the query when a user has clicked on
+        an example search.
+    */
+    const onSubmitSearch = async (text?: string) => {
         try {
             setIsLoading(true);
+            
+            // Make sure text isn't being set as e (synthetic event)
+            const isExampleQuery = text && typeof text === "string";
+            
+            if (isExampleQuery) {
+                setQuery(text);
+            }
 
-            const response = await fetch("http://localhost:3000/api/read", {
+            const serverBaseUrl = process.env.NEXT_PUBLIC_SERVER_URL 
+                ?? "http://localhost:3000";
+
+            const response = await fetch(`${serverBaseUrl}/api/read`, {
                 method: "POST",
-                body: JSON.stringify({ question: query })
+                body: JSON.stringify({ question: isExampleQuery ? text : query })
             });
 
             const result = await response.json();
-            setResult(result.data);
-
-            const updatedQueries = [...queries, query];
-            setQueries(updatedQueries);
-            setQuery("");
-            setIsLoading(false);
+            updateSearchState(result.data, isExampleQuery ? text : query);
         } catch (e) {
             setIsLoading(false);
             const typedError = e as Error;
@@ -60,38 +75,33 @@ export default function SearchModal() {
         }
     }
 
+    // We have 3 components to display:
+    // 1. searchInit -> initial search screen
+    // 2. searchResult -> the search result from pinecone
+    // 3. loading spinner -> loading the answer from pinecone
+    
     const searchInit = (
         <>
             <h1 className="mt-24 font-bold text-2xl mb-8">Examples</h1>
-            { defaultSelections.map((selectionText, index) => <Selection key={index} text={selectionText} />)}
+            { defaultSelections.map((selectionText, index) => 
+                <Selection 
+                    key={index} 
+                    text={selectionText}
+                    onSubmitSearch={onSubmitSearch} 
+                />)}
         </>
     );
 
     const searchResult = (
-        <>
-            <div className="flex flex-col w-5/6 justify-center p-8 mt-2 border-b border-slate-100">
-                <div className="flex w-full items-center">
-                    <div className="w-10 h-10 rounded-full border border-gray flex justify-center items-center ">
-                        <Image src="/icons/user.svg" alt="user" width="20" height="20" /> 
-                    </div>
-                    <p className="ml-4 w-5/6 text-left">{queries[queries.length - 1]}</p>
-                </div>
-                <div className="flex w-full mt-8">
-                    <Image src="/icons/AI.svg" alt="user" width="40" height="40" className="h-10" /> 
-                    <p className="ml-4 w-full text-left">{result}</p>
-                </div>
-            </div>
-            <div className="w-5/6 px-8 flex items-start my-4">
-                <h3 className="font-semibold uppercase text-xs text-gray">
-                    Your Question is Answered In These Posts
-                </h3>
-            </div>
-            { /* dummy post results for now */}
-            <PostResult />
-            <PostResult />
-        </>
+        <SearchResult
+            queries={queries}
+            result={result} 
+        />
     );
-
+    
+    // determine which component to display
+    // if we're loading display spinner.
+    
     let loadedComponent = null;
 
     if (!isLoading) {
@@ -99,8 +109,15 @@ export default function SearchModal() {
     }
 
     return (
-        <div className="h-full w-full bg-slate-600 bg-opacity-50 z-10 absolute top-0 left-0 flex flex-col justify-center items-center">
-            <div className="h-3/4 w-2/3 bg-white rounded-3xl bg-opacity-100 flex flex-col items-center relative">
+        <div 
+            className="h-full w-full bg-slate-600 bg-opacity-50 z-10 absolute top-0 left-0 flex flex-col justify-center items-center"
+            onClick={closeModal}>
+            <div 
+                className="h-3/4 w-2/3 bg-white rounded-3xl bg-opacity-100 z-20 flex flex-col items-center relative overflow-scroll"
+                /** this is kind of a hacky way to handle this click, but I don't want to waste a bunch of time making the backdrop a
+                 * a sibling element instead of a parent element.
+                 */
+                onClick={e => e.stopPropagation()}>
                 {loadedComponent}
                 {isLoading && (
                     <div className="h-full w-full flex justify-center items-center">
