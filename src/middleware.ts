@@ -7,8 +7,10 @@ const publicRoutes = [
   "/blog/:slug",
   "/auth/sign-in",
   "/auth/sign-up",
-  "/auth/sign-out"
+  "/auth/sign-out",
+  "/api/read",
 ];
+
 // const privateRoutes = ["/example-private"];
 
 export default authMiddleware({
