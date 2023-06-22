@@ -1,6 +1,7 @@
 import { Post as PostModel } from "@/models";
 import { SortDirection, Storage, withSSRContext } from "aws-amplify";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import Image from "next/image";
 
 interface StaticParams {
   slug: string;
@@ -48,16 +49,32 @@ export async function generateMetadata({ params }: BlogPageParams) {
 export const revalidate: number = 30;
 
 export default async function blogPage({ params }: BlogPageParams) {
-  const file = await Storage.get(`${params.slug}.mdx`, {
-    level: "public"
-  });
-  const data = await (await fetch(file)).text();
+  const [mdxFile, imageUrl] = await Promise.allSettled([
+    Storage.get(`${params.slug}.mdx`, { level: "public" }),
+    Storage.get(`${params.slug}.webp`, { level: "public" })
+  ]);
 
-  return (
-    <div>
-      <article className="prose py-10 w-[90%] mx-auto">
-        <MDXRemote source={data} />
-      </article>
-    </div>
-  );
+  if (mdxFile.status === "fulfilled" && imageUrl.status === "fulfilled") {
+    const mdxSource = await (await fetch(mdxFile.value)).text();
+    const imageSrc = imageUrl.value;
+
+    return (
+      <div className="bg-gray-50 pt-4">
+        <section className="w-[90%] max-w-[806px] mx-auto bg-white rounded-lg overflow-hidden">
+          <Image
+            className="w-full object-fills object-center h-[300px]"
+            width={300}
+            height={300}
+            src={imageSrc}
+            alt={`ia-image by ${params.slug}`}
+          />
+          <article className="prose py-8 px-16">
+            <MDXRemote source={mdxSource} />
+          </article>
+        </section>
+      </div>
+    );
+  } else {
+    return <div>error</div>;
+  }
 }
