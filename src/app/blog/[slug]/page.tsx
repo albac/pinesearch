@@ -13,7 +13,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export const revalidate = 600;
+export const revalidate = 30;
 
 export default async function blogPage({ params }: { params: any }) {
   const file = await Storage.get(`${params.slug}.mdx`, {
