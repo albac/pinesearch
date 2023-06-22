@@ -1,31 +1,102 @@
-import { Post } from "@/models";
+import { Post as PostModel } from "@/models";
 import { SortDirection, Storage, withSSRContext } from "aws-amplify";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import Image from "next/image";
 
-export async function generateStaticParams() {
+interface StaticParams {
+  slug: string;
+}
+
+interface BlogPageParams {
+  params: {
+    slug: string;
+  };
+}
+
+interface Post {
+  title: string;
+  summary: string;
+  s3url: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export async function generateStaticParams(): Promise<StaticParams[]> {
   const { DataStore } = withSSRContext();
-  const posts = await DataStore.query(Post, (c: any) => c, {
+  const posts = await DataStore.query(PostModel, (c: Post) => c, {
     sort: (s: any) => s.updatedAt(SortDirection.DESCENDING)
   });
 
-  return posts.map((post: any) => ({
+  return posts.map((post: Post) => ({
     slug: post.s3url
   }));
 }
 
-export const revalidate = 30;
+export async function generateMetadata({ params }: BlogPageParams) {
+  const { DataStore } = withSSRContext();
+  const post = await DataStore.query(PostModel, (c: any) => c.s3url.eq(params.slug));
 
-export default async function blogPage({ params }: { params: any }) {
-  const file = await Storage.get(`${params.slug}.mdx`, {
-    level: "public"
-  });
-  const data = await (await fetch(file)).text();
+  if (!post || !post[0]?.title) {
+    return null;
+  }
 
-  return (
-    <div>
-      <article className="prose py-10 w-[90%] mx-auto">
-        <MDXRemote source={data} />
-      </article>
-    </div>
-  );
+  return {
+    title: post[0].title,
+    description: post[0].summary
+  };
+}
+
+export const revalidate: number = 30;
+
+export default async function blogPage({ params }: BlogPageParams) {
+  const [mdxFile, imageUrl] = await Promise.allSettled([
+    Storage.get(`${params.slug}.mdx`, { level: "public" }),
+    Storage.get(`${params.slug}.webp`, { level: "public" })
+  ]);
+
+  if (mdxFile.status === "fulfilled" && imageUrl.status === "fulfilled") {
+    const mdxSource = await (await fetch(mdxFile.value)).text();
+    const imageSrc = imageUrl.value;
+
+    return (
+      <div className="bg-gray-50 py-4">
+        <section className="w-[90%] max-w-[806px] mx-auto bg-white rounded-lg overflow-hidden">
+          <Image
+            className="w-full object-fills object-center h-[300px]"
+            width={300}
+            height={300}
+            src={imageSrc}
+            alt={`ia-image by ${params.slug}`}
+          />
+          <article
+            className="
+          prose
+          prose-headings:leading-tight
+          prose-h1:text-3xl
+          prose-h1:mb-10
+          prose-h2:text-[27px]
+          prose-h2:my-[10px]
+          prose-p:m-0
+          prose-p:mb-4
+          prose-p:text-lg 
+          lg:prose-p:text-xl
+          lg:prose-p:mb-5
+          md:prose-h1:text-4xl
+          lg:prose-h2:text-3xl
+          lg:prose-h1:text-5xl
+          py-4
+          px-8
+          md:py-6
+          md:px-12
+          lg:py-8
+          lg:px-16"
+          >
+            <MDXRemote source={mdxSource} />
+          </article>
+        </section>
+      </div>
+    );
+  } else {
+    return <div>error</div>;
+  }
 }
