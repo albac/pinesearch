@@ -22,13 +22,13 @@
         },
         "PinesearchCheckURL": {
           "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
-          "s3Key": "amplify-builds/PinesearchCheckURL-4f2f756b784a7163324c-build.zip",
+          "s3Key": "amplify-builds/PinesearchCheckURL-454373354e63364b4b48-build.zip",
           "searchEngineId": "4683b80a314924f72",
           "secretsPathAmplifyAppId": "d6qm6fb1j4see"
         },
         "PinesearchBlogCreator": {
           "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
-          "s3Key": "amplify-builds/PinesearchBlogCreator-2b6f2f42776f36787649-build.zip"
+          "s3Key": "amplify-builds/PinesearchBlogCreator-52394548526e66573356-build.zip"
         }
       },
       "storage": {
