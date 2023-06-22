@@ -2,13 +2,18 @@
 
 import { useRouter } from "next/navigation";
 
-export default function SearchForm() {
+interface IProps {
+  openModal: () => void
+}
+
+export default function SearchForm({openModal}: IProps) {
   const router = useRouter();
 
   const onSubmitForm = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/blog");
+    // openModal();
   };
+
   return (
     <form onSubmit={onSubmitForm}>
       <h1 className="text-5xl font-bold">PineSearch</h1>
@@ -18,6 +23,7 @@ export default function SearchForm() {
           className="w-full py-3 sm:py-7 pl-7 outline-none"
           type="text"
           placeholder="Search a topic or ask a question"
+          onFocus={openModal}
         />
         <button className="bg-black text-white px-5">O</button>
       </div>
