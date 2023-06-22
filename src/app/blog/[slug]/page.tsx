@@ -59,7 +59,7 @@ export default async function blogPage({ params }: BlogPageParams) {
     const imageSrc = imageUrl.value;
 
     return (
-      <div className="bg-gray-50 pt-4">
+      <div className="bg-gray-50 py-4">
         <section className="w-[90%] max-w-[806px] mx-auto bg-white rounded-lg overflow-hidden">
           <Image
             className="w-full object-fills object-center h-[300px]"
