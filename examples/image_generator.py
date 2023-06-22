@@ -22,7 +22,7 @@ pipe = pipe.to(device)
 
 def text_to_image(summary, image_name):
 
-    # Crea una instancia del cliente de S3
+    # Create an instance of the S3 client
     s3 = boto3.client('s3',
                       aws_access_key_id=AWS_ACCESS_KEY_ID,
                       aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
@@ -30,27 +30,25 @@ def text_to_image(summary, image_name):
     image_name = '-'.join(image_name.split()) + ".webp"
 
     def save_image_to_s3(image):
-        # Crea un objeto de BytesIO para almacenar la imagen
+        # Create a BytesIO object to store the image.
         image_buffer = BytesIO()
         image.save(image_buffer, format='WEBP')
         image_buffer.seek(0)
 
-        # Ruta completa del archivo en el bucket
+        # Full path of the file in the bucket
         s3_key = "public/" + image_name
 
-        # Sube la imagen al bucket de S3
+        # Upload the image to the S3 bucket
         s3.upload_fileobj(image_buffer, S3_BUCKET_NAME, s3_key)
 
     def generator_image(summary):
         prompt = summary
         image = pipe(prompt).images[0]
 
-        # Guarda la imagen en S3
+        # Save the image in S3
         save_image_to_s3(image)
 
-    # generate image
     generator_image(summary)
-
     return image_name
 
 
