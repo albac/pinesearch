@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import SearchModalFooter from "./SearchModalFooter";
+import PostResult from "./PostResult";
+import PulseLoader from "react-spinners/PulseLoader";
 
 interface ISelectionProps {
     text: string
@@ -28,21 +30,33 @@ const Selection = ({ text }: ISelectionProps) => {
 }
 
 export default function SearchModal() {
-    const [query, setQuery] = useState("What is neuroscience?");
-    const [result, setResult] = useState<string | null>(" Neuroscience is the scientific study of the nervous system, including the brain, spinal cord, and peripheral nerves. It focuses on how the nervous system develops, is structured, and what it does. It also studies the related functions of cognition, emotion, and behavior.");
+    // const [query, setQuery] = useState("What is neuroscience?");
+    const [query, setQuery] = useState("");
+    const [queries, setQueries] = useState<Array<string>>([]);
+    // const [result, setResult] = useState<string | null>(" Neuroscience is the scientific study of the nervous system, including the brain, spinal cord, and peripheral nerves. It focuses on how the nervous system develops, is structured, and what it does. It also studies the related functions of cognition, emotion, and behavior.");
+    const [result, setResult] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmitSearch = async () => {
         try {
+            setIsLoading(true);
+
             const response = await fetch("http://localhost:3000/api/read", {
                 method: "POST",
                 body: JSON.stringify({ question: query })
             });
 
             const result = await response.json();
-            setResult(result);
+            setResult(result.data);
+
+            const updatedQueries = [...queries, query];
+            setQueries(updatedQueries);
+            setQuery("");
+            setIsLoading(false);
         } catch (e) {
+            setIsLoading(false);
             const typedError = e as Error;
-            console.log("Error submitting search - ", typedError.message)
+            console.log("Error submitting search - ", typedError.message);
         }
     }
 
@@ -60,21 +74,39 @@ export default function SearchModal() {
                     <div className="w-10 h-10 rounded-full border border-gray flex justify-center items-center ">
                         <Image src="/icons/user.svg" alt="user" width="20" height="20" /> 
                     </div>
-                    <p className="ml-4 w-5/6 text-left">{query}</p>
+                    <p className="ml-4 w-5/6 text-left">{queries[queries.length - 1]}</p>
                 </div>
                 <div className="flex w-full mt-8">
                     <Image src="/icons/AI.svg" alt="user" width="40" height="40" className="h-10" /> 
                     <p className="ml-4 w-full text-left">{result}</p>
                 </div>
             </div>
-            <h3>Your Question is Answered In These Posts </h3>
+            <div className="w-5/6 px-8 flex items-start my-4">
+                <h3 className="font-semibold uppercase text-xs text-gray">
+                    Your Question is Answered In These Posts
+                </h3>
+            </div>
+            { /* dummy post results for now */}
+            <PostResult />
+            <PostResult />
         </>
     );
+
+    let loadedComponent = null;
+
+    if (!isLoading) {
+        loadedComponent = !result ? searchInit : searchResult;
+    }
 
     return (
         <div className="h-full w-full bg-slate-600 bg-opacity-50 z-10 absolute top-0 left-0 flex flex-col justify-center items-center">
             <div className="h-3/4 w-2/3 bg-white rounded-3xl bg-opacity-100 flex flex-col items-center relative">
-                { !result ? searchInit : searchResult }
+                {loadedComponent}
+                {isLoading && (
+                    <div className="h-full w-full flex justify-center items-center">
+                       <PulseLoader />
+                    </div>
+                )}
                 <SearchModalFooter 
                     onSubmitSearch={onSubmitSearch}
                     query={query}
