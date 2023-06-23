@@ -70,6 +70,9 @@ export default async function blogPage({ params }: BlogPageParams) {
           />
           <article
             className="
+          border
+        border-gray-200
+          max-w-none
           prose
           prose-headings:leading-tight
           prose-h1:text-3xl
