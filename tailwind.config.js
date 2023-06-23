@@ -8,7 +8,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        custom_gray: "#4D4847"
+        "fig-dark": "#000F08",
+        "fig-primary": "#1C3738",
+        "fig-mint": "#F4FFF8",
+        "fig-gray": "#4D4847",
+        "fig-teal": "#2C2C2C",
+        "fig-ligth-mint": "#F9FCFA",
+        "fig-grey-mint": "#F2F5F4"
       }
     }
   },
