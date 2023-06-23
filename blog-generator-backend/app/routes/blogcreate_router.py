@@ -1,91 +1,75 @@
 import logging
-from ..blog_generator import get_blog_output, load_and_process_pdf_extra, write_output, upload_to_s3, init_pinecone, create_pinecone_vector_extra
+from .BlogGenerator import BlogGenerator
 from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import Union
-import pinecone
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(logging.StreamHandler())
 
 
-PROMPT_TEMPLATE = """Write a long summary with subtitles.
+# PROMPT_TEMPLATE = """Write a long summary with subtitles.
+# Remember the date of publication if exist for the nex prompt.
+# The output should be a markdown format. Text context information is bellow:
+#
+#
+# {text}
+#
+#
+# """
+#
+# PROMPT_TEMPLATE_COMBINED = """Write a blog with one main title, subtitles and large subtitle if required, provide any contact info if exist.
+# Do no use Summary or Contact as main title. The output should be a markdown format.
+# Mention only one date of publication for the whole blog. Text context information is bellow:
+#
+#
+# {text}
+#
+#
+# """
+
+prompt_template = """Write a long summary with subtitles.
 Remember the date of publication if exist for the nex prompt.
 The output should be a markdown format. Text context information is bellow:
-
-
 {text}
-
-
 """
 
-PROMPT_TEMPLATE_COMBINED = """Write a blog with one main title, subtitles and large subtitle if required, provide any contact info if exist.
+prompt_template_combined = """Write a blog with one main title, subtitles and large subtitle if required, provide any contact info if exist.
 Do no use Summary or Contact as main title. The output should be a markdown format.
 Mention only one date of publication for the whole blog. Text context information is bellow:
-
-
 {text}
-
-
 """
+
+prompt_template_summary = """Write a summary of the following article while preserving the first line as the article's title.
+The output should have the following structure: 'Title' followed by a line break, then the obtained title, followed by another line break, and finally, a concise summary of no more than 200 characters. Ensure that the summary ends with a complete idea. The 'Title' part should be preceded by the word 'Title,' followed by a line break, the obtained title, another line break, and the concise summary. Text context information is bellow:
+{text}
+"""
+
 
 router = APIRouter()
 
 INDEX_NAME = "summarize1"
 
 
-class Item(BaseModel):
-    pdfurl: str
-    filename: str
+class PDFData(BaseModel):
+    pdf_url: str
+    pinecone_index: str
     bucket_name: str
-    prompt_template: Union[str, None] = None
-    prompt_template_combined: Union[str, None] = None
 
 
 @router.post("/")
-async def create_item(item: Item):
+async def generate_blog(pdf_data: PDFData):
+    bg = BlogGenerator(
+        pdf_data.pdf_url,
+        prompt_template,
+        prompt_template_combined,
+        prompt_template_summary,
+        pdf_data.pinecone_index,
+        pdf_data.bucket_name
+    )
 
-    filename = item.filename
+    # texts = bg.load_and_process_pdf()
+    texts = bg.load_and_process_pdf_extra()
+    response = bg.get_blog_output(texts)
 
-    texts = load_and_process_pdf_extra(item.pdfurl)
-
-    if not texts:
-        return {'message': 'URL PDF failed to load!!'}
-
-    init_pinecone()
-
-    try:
-        vectordb = create_pinecone_vector_extra(texts, INDEX_NAME)
-    except Exception as e:
-        logger.info('Error creating vector: ', e)
-        return {'response': 'vector failed!!'}
-
-    try:
-        summary = get_blog_output(
-            vectordb,
-            PROMPT_TEMPLATE,
-            PROMPT_TEMPLATE_COMBINED)
-
-    except Exception as e:
-        logger.info(f"An error occurred: {str(e)}")
-        return {'response': 'summary failed!!'}
-
-    try:
-        write_output(summary, filename)
-        logger.info('Write summary locally successful!')
-    except Exception as e:
-        logger.info('Can not write summary locally. Error: ', e)
-        return {'message': 'Error: Can not write output locally'}
-
-    try:
-        upload_to_s3(filename, item.bucket_name)
-        logger.info('File uploaded to s3!')
-    except Exception as e:
-        logger.info('Failed to write to s3. Error: ', e)
-        return {'message': 'Error, failed to upload to s3, see logs.'}
-
-    index = pinecone.Index(INDEX_NAME)
-    index.delete(deleteAll='true')
-
-    return {'message': 'Blog creating completed'}
+    return response

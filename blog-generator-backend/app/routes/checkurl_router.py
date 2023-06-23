@@ -84,7 +84,7 @@ def validate_url(url):
 
     total_count = count_tokens(pages)
     logger.info(f'Total count: {total_count}')
-    if total_count < 20000:
+    if total_count < 10000:
         logger.info('Not enought tokens for a blog')
         return False
     return True
@@ -106,7 +106,7 @@ async def create_item(event: Item):
             pdf_url = item['link']
             sleep(300/1000)
             try:
-                response = requests.head(pdf_url)
+                response = requests.head(pdf_url, timeout=10)
             except Exception as e:
                 logger.info(f"Can not load PDF. Error: {e}")
                 continue
