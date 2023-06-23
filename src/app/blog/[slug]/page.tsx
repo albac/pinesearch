@@ -2,6 +2,7 @@ import { Post as PostModel } from "@/models";
 import { SortDirection, Storage, withSSRContext } from "aws-amplify";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Image from "next/image";
+import AudioBtn from "./AudioBtn";
 
 interface StaticParams {
   slug: string;
@@ -49,14 +50,20 @@ export async function generateMetadata({ params }: BlogPageParams) {
 export const revalidate: number = 30;
 
 export default async function blogPage({ params }: BlogPageParams) {
-  const [mdxFile, imageUrl] = await Promise.allSettled([
+  const [mdxFile, imageUrl, audio_src] = await Promise.allSettled([
     Storage.get(`${params.slug}.mdx`, { level: "public" }),
-    Storage.get(`${params.slug}.webp`, { level: "public" })
+    Storage.get(`${params.slug}.webp`, { level: "public" }),
+    Storage.get(`${params.slug}.wav`, { level: "public" })
   ]);
 
-  if (mdxFile.status === "fulfilled" && imageUrl.status === "fulfilled") {
+  if (
+    mdxFile.status === "fulfilled" &&
+    imageUrl.status === "fulfilled" &&
+    audio_src.status === "fulfilled"
+  ) {
     const mdxSource = await (await fetch(mdxFile.value)).text();
     const imageSrc = imageUrl.value;
+    const voice = audio_src.value;
 
     return (
       <div className="py-4">
@@ -68,6 +75,7 @@ export default async function blogPage({ params }: BlogPageParams) {
             src={imageSrc}
             alt={`ia-image by ${params.slug}`}
           />
+          <AudioBtn voice={voice} />
           <article
             className="
           max-w-none
