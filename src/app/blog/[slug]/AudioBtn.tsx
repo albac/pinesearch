@@ -40,13 +40,13 @@ export default function AudioBtn({ voice }: { voice: any }) {
   return (
     <div>
       {isPlaying ? (
-        <Button onClick={pauseAudio}>Pausar audio</Button>
+        <Button onClick={pauseAudio}>Stop Audio</Button>
       ) : (
         <>
           {isEnded ? (
-            <Button onClick={playAudio}>Volver a Reproducir audio</Button>
+            <Button onClick={playAudio}>Replay Audio</Button>
           ) : (
-            <Button onClick={playAudio}>Reproducir audio</Button>
+            <Button onClick={playAudio}>Play Audio</Button>
           )}
         </>
       )}
