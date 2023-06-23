@@ -59,8 +59,8 @@ export default async function blogPage({ params }: BlogPageParams) {
     const imageSrc = imageUrl.value;
 
     return (
-      <div className="bg-gray-50 py-4">
-        <section className="w-[90%] max-w-[806px] mx-auto bg-white rounded-lg overflow-hidden">
+      <div className="py-4">
+        <section className="w-[90%] max-w-[806px] mx-auto">
           <Image
             className="w-full object-fills object-center h-[300px]"
             width={300}
@@ -70,8 +70,6 @@ export default async function blogPage({ params }: BlogPageParams) {
           />
           <article
             className="
-          border
-        border-gray-200
           max-w-none
           prose
           prose-headings:leading-tight

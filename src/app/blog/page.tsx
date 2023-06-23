@@ -28,7 +28,7 @@ export default async function page() {
         <h2 className="uppercase mt-10 font-semibold text-gray-500 text-xs">Related Topics</h2>
         <div className="mt-8 flex flex-wrap gap-4">
           {TAGS.map((tag) => (
-            <button key={tag} className="rounded-full bg-gray-200 px-2 py-1 text-sm">
+            <button key={tag} className="rounded-full bg-gray-100 px-3 py-2 text-sm">
               {tag}
             </button>
           ))}
