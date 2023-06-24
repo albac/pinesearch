@@ -182,7 +182,7 @@ class BlogGenerator:
             prompt_template = PromptTemplate(input_variables=["text"], template=self.prompt_template_summary)
             summary_2 = openai(prompt_template.format(text=summary["output_text"]))
 
-            self.write_output(summary, self.filename + ".mdx")
+            self.write_output(summary, self.filename + ".md")
             patron = r"Title: (.+)"
             coincidencia = re.search(patron, summary_2)
             titulo = ""
@@ -193,8 +193,8 @@ class BlogGenerator:
 
             metadata = {"titulo": titulo, "url": self.pdf_url, "resumen": header_cleaned}
             cleaned_metadata = {k: v.encode("ascii", "ignore").decode("ascii") for k, v in metadata.items()}
-            key = "public/" + self.filename + ".mdx"
-            file_name = self.filename + ".mdx"
+            key = "public/" + self.filename + ".md"
+            file_name = self.filename + ".md"
             self.upload_to_s3(key, file_name, cleaned_metadata)
 
             index = pinecone.Index(self.pinecone_index)
