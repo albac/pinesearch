@@ -2,6 +2,7 @@
 
 import Tag from "@/components/Tag";
 import { useRouter } from "next/navigation";
+import MagnifyingGlassIcon from "../../../public/icons/MagnifyingGlassIcon";
 
 interface IProps {
   openModal: () => void;
@@ -24,17 +25,19 @@ export default function SearchForm({ openModal }: IProps) {
         Transforming the internet’s pdfs into beautiful blog posts
       </p>
       {/* Input */}
-      <div className="mx-auto mt-10 flex lg:w-[840px] overflow-hidden rounded-full border border-gray-800">
+      <div className="mx-auto mt-[60px] py-[28px] px-7 flex lg:w-[840px] overflow-hidden rounded-full border border-fig-gray bg-fig-ligth-mint">
         <input
-          className="w-full py-[28px] pl-7 outline-none bg-fig-ligth-mint placeholder:text-fig-gray placeholder:font-poping"
+          className="w-full outline-none placeholder:text-fig-gray placeholder:font-poping bg-transparent"
           type="text"
-          placeholder="Search a topic or ask a question"
+          placeholder="Search a topic"
           onFocus={openModal}
         />
-        <button className="bg-fig-teal text-white px-5">O</button>
+        <picture className="bg-fig-teal rounded-full scale-[2.5]">
+          <MagnifyingGlassIcon className="fill-white h-[25px] w-[25px] p-2" />
+        </picture>
       </div>
       {/* End Input */}
-      <div className="mt-5 flex flex-col items-center justify-center gap-5 sm:flex-row">
+      <div className="mt-[30px] flex flex-col items-center justify-center gap-5 sm:flex-row">
         <p>Quick search:</p>
         <div className="flex flex-col gap-3 sm:flex-row">
           {TAGS.map((tag) => (

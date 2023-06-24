@@ -139,12 +139,12 @@
   font-family: "PT Serif";
   font-style: normal;
   font-weight: 400;
-  src: url("/fonts/pt_serif/PTSerif-Regular.ttf") format("truetype");
+  src: url("/fonts/ptserif/PTSerif-Regular.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "PT Serif";
   font-style: normal;
   font-weight: 700;
-  src: url("/fonts/pt_serif/PTSerif-Bold.ttf") format("truetype");
+  src: url("/fonts/ptserif/PTSerif-Bold.ttf") format("truetype");
 }
