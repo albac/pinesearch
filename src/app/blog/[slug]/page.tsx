@@ -51,26 +51,19 @@ export const revalidate: number = 30;
 
 export default async function blogPage({ params }: BlogPageParams) {
   const [mdxFile, imageUrl, audio_src] = await Promise.allSettled([
-    Storage.get(`${params.slug}.mdx`, { level: "public" }),
+    Storage.get(`mdx/${params.slug}.md`, { level: "public" }),
     Storage.get(`${params.slug}.webp`, { level: "public" }),
     Storage.get(`${params.slug}.wav`, { level: "public" })
   ]);
 
-  let mdxSource = "";
-  if (mdxFile.status === "rejected") {
-    mdxSource = await (await fetch(mdxFile.value)).text();
-  }
-
-  if (mdxFile.status === "fulfilled") {
-    const file = await Storage.get(`${params.slug}.md`, {
-      level: "public"
-    });
-    mdxSource = await (await fetch(file)).text();
-  }
-
-  if (imageUrl.status === "fulfilled" && audio_src.status === "fulfilled") {
+  if (
+    imageUrl.status === "fulfilled" &&
+    audio_src.status === "fulfilled" &&
+    mdxFile.status === "fulfilled"
+  ) {
     const imageSrc = imageUrl.value;
     const voice = audio_src.value;
+    const mdxSource = await (await fetch(mdxFile.value)).text();
 
     return (
       <div className="py-4">
