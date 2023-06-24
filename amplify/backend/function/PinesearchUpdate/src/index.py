@@ -6,7 +6,7 @@ import boto3
 import logging
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 s3 = boto3.client('s3')
@@ -14,6 +14,14 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 dynamodb = boto3.resource('dynamodb')
 TABLE = 'Post-5d4z66ql5rbmzpdsinuz3tiezy-dev'
+
+
+def isoformat_js(dt: datetime):
+    return (
+        dt.astimezone(timezone.utc)
+        .isoformat(timespec="milliseconds")
+        .replace("+00:00", "Z")
+    )
 
 
 def handler(event, context):
@@ -33,35 +41,48 @@ def handler(event, context):
         print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(key, bucket))
         raise e
 
-    # url = response['Metadata']['url']
     filename = '%s' % os.path.basename(key)
     s3url = os.path.splitext(filename)[0]
 
-    # get current datetime
-    today = datetime.now()
-    print('Today Datetime:', today)
-
-    # Get current ISO 8601 datetime in string format
-    iso_date = today.isoformat()
-    print('ISO DateTime:', iso_date)
-
     ts = time.time()
 
-    ts_string = str(ts).split('.')
+    ts_string = str(ts).replace('.', '')
 
     summary_str = str(response['Metadata']['resumen']).split(':')
 
-    item = {}
+    iso_date = isoformat_js(datetime(2014, 7, 24, 0, 19, 37, 439000))
 
-    item['title'] = response['Metadata']['titulo']
-    item['summary'] = summary_str[1]
-    item['s3url'] = s3url
-    item['createdAt'] = iso_date
-    item['updatedAt'] = iso_date
-    item['_lastChangedAt'] = ts_string[0]
-    item['_version'] = 1
-    item['__typename'] = 'Post'
-    item['id'] = str(uuid.uuid4())
+    print('ISO DateTime:', iso_date)
+
+    item = {
+      "id": {
+        "S": str(uuid.uuid4())
+      },
+      "createdAt": {
+        "S": iso_date
+      },
+      "s3url": {
+        "S": s3url
+      },
+      "summary": {
+        "S": summary_str[1]
+      },
+      "title": {
+        "S": response['Metadata']['titulo']
+      },
+      "updatedAt": {
+        "S": iso_date
+      },
+      "_lastChangedAt": {
+        "N": ts_string
+      },
+      "_version": {
+        "N": "1"
+      },
+      "__typename": {
+        "S": "Post"
+      }
+    }
 
     # table name
     table = dynamodb.Table(TABLE)
