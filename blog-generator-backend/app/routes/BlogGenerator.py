@@ -28,7 +28,9 @@ class BlogGenerator:
     def __init__(self, pdf_url, prompt_template, prompt_template_combined, prompt_template_summary, pinecone_index, bucket_name):
         self.pdf_url = pdf_url
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Obtener el timestamp actual
-        self.filename = self.pdf_url.split("/")[-1] + "_" + timestamp
+        no_url = self.pdf_url.split("/")[-1]
+        filestring = ''.join(e for e in no_url if e.isalnum())
+        self.filename = filestring[-10:] + "_" + timestamp
         self.prompt_template = prompt_template
         self.prompt_template_combined = prompt_template_combined
         self.prompt_template_summary = prompt_template_summary
@@ -187,7 +189,7 @@ class BlogGenerator:
 
             metadata = {"titulo": titulo, "url": self.pdf_url, "resumen": header_cleaned}
             cleaned_metadata = {k: v.encode("ascii", "ignore").decode("ascii") for k, v in metadata.items()}
-            key = "public/" + self.filename + ".md"
+            key = "public/mdx/" + self.filename + ".md"
             file_name = self.filename + ".md"
             self.upload_to_s3(key, file_name, cleaned_metadata)
 
