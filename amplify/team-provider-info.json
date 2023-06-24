@@ -16,10 +16,6 @@
         "pinesearchc776f9f1": {}
       },
       "function": {
-        "S3Triggera84e359f": {
-          "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
-          "s3Key": "amplify-builds/S3Triggera84e359f-684544372b6561495571-build.zip"
-        },
         "PinesearchCheckURL": {
           "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
           "s3Key": "amplify-builds/PinesearchCheckURL-454373354e63364b4b48-build.zip",
@@ -29,6 +25,10 @@
         "PinesearchBlogCreator": {
           "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
           "s3Key": "amplify-builds/PinesearchBlogCreator-52394548526e66573356-build.zip"
+        },
+        "PinesearchUpdate": {
+          "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
+          "s3Key": "amplify-builds/PinesearchUpdate-79756548593453366132-build.zip"
         }
       },
       "storage": {
