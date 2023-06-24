@@ -1,3 +1,4 @@
+import Tag from "@/components/Tag";
 import { formateDate } from "@/helpers";
 import { Storage } from "aws-amplify";
 import Image from "next/image";
@@ -21,10 +22,10 @@ export default async function PostItem({ post }: { post: any }) {
           alt={`image-created-by-${s3url}`}
         />
         <div className="mt-3 lg:mt-0">
-          <p className="text-base text-gray-400"> {formateDate(new Date(createdAt))}</p>
-          <h2 className="font-semibold text-[22px]">{title}</h2>
-          <p className="mt-2">{summary}</p>
-          <div className="mt-2 rounded-full bg-gray-100 px-2.5 py-1 inline-block">Biology</div>
+          <p className="text-base text-gray-400 font-poping"> {formateDate(new Date(createdAt))}</p>
+          <h2 className="font-semibold text-[22px] font-poping leading-tight">{title}</h2>
+          <p className="mt-2 font-pt_serif">{summary}</p>
+          <Tag className="mt-2 rounded-full bg-gray-100 px-2.5 py-1 inline-block">Biology</Tag>
         </div>
       </article>
     </Link>

@@ -15,14 +15,14 @@ export default async function Navbar() {
           {!user ? (
             <>
               <div className="mt-2 sm:mt-0">
-                <SignInButton />
+                <SignInButton>Log in</SignInButton>
               </div>
-              <div className="mt-2 rounded-full bg-black px-5 py-2 text-white sm:mt-0">
+              <div className="mt-2 rounded-full bg-fig-primary px-5 py-2 text-white sm:mt-0 font-medium">
                 <SignUpButton />
               </div>
             </>
           ) : (
-            <div className="mt-2 rounded-full bg-black px-5 py-2 text-white sm:mt-0">
+            <div className="mt-2 rounded-full bg-fig-primary px-5 py-2 text-white sm:mt-0 font-medium">
               <SignOutButton />
             </div>
           )}
