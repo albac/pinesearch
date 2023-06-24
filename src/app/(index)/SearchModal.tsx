@@ -59,7 +59,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
       }
 
       const serverBaseUrl = process.env.TEST_DEPLOY
-        ? "https://main.d6qm6fb1j4see.amplifyapp.com/blog"
+        ? "https://main.d6qm6fb1j4see.amplifyapp.com"
         : "http://localhost:3000";
 
       const response = await fetch(`${serverBaseUrl}/api/read`, {
