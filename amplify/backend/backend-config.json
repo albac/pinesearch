@@ -92,7 +92,7 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "S3Triggera84e359f": {
+    "PinesearchUpdate": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -154,19 +154,19 @@
         }
       ]
     },
-    "AMPLIFY_function_S3Triggera84e359f_deploymentBucketName": {
+    "AMPLIFY_function_PinesearchUpdate_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "S3Triggera84e359f"
+          "resourceName": "PinesearchUpdate"
         }
       ]
     },
-    "AMPLIFY_function_S3Triggera84e359f_s3Key": {
+    "AMPLIFY_function_PinesearchUpdate_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "S3Triggera84e359f"
+          "resourceName": "PinesearchUpdate"
         }
       ]
     },
@@ -197,7 +197,7 @@
             "LambdaExecutionRole"
           ],
           "category": "function",
-          "resourceName": "S3Triggera84e359f"
+          "resourceName": "PinesearchUpdate"
         }
       ],
       "providerPlugin": "awscloudformation",

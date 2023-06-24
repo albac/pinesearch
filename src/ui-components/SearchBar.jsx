@@ -23,7 +23,7 @@ export default function SearchBar(props) {
       border="1px SOLID rgba(77,72,71,1)"
       borderRadius="100px"
       padding="9px 7px 9px 31px"
-      backgroundColor="rgba(247,249,248,1)"
+      backgroundColor="rgba(249,252,250,1)"
       {...getOverrideProps(overrides, "SearchBar")}
       {...rest}
     >
