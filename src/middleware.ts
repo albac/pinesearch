@@ -9,6 +9,7 @@ const publicRoutes = [
   "/auth/sign-up",
   "/auth/sign-out",
   "/api/read",
+  "/chat"
 ];
 
 // const privateRoutes = ["/example-private"];
