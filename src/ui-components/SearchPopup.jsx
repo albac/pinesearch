@@ -38,7 +38,7 @@ export default function SearchPopup(props) {
         top="483px"
         left="0px"
         padding="0px 0px 0px 0px"
-        backgroundColor="rgba(247,249,248,1)"
+        backgroundColor="rgba(249,252,250,1)"
         {...getOverrideProps(overrides, "Search")}
       >
         <Text
@@ -159,7 +159,7 @@ export default function SearchPopup(props) {
         left="209px"
         borderRadius="12px"
         padding="17px 20px 17px 20px"
-        backgroundColor="rgba(247,249,248,1)"
+        backgroundColor="rgba(249,252,250,1)"
         {...getOverrideProps(overrides, "ExampleThree")}
       >
         <Text
@@ -236,7 +236,7 @@ export default function SearchPopup(props) {
         left="209px"
         borderRadius="12px"
         padding="17px 20px 17px 20px"
-        backgroundColor="rgba(247,249,248,1)"
+        backgroundColor="rgba(249,252,250,1)"
         {...getOverrideProps(overrides, "ExampleTwo")}
       >
         <Text
@@ -313,7 +313,7 @@ export default function SearchPopup(props) {
         left="209px"
         borderRadius="12px"
         padding="17px 20px 17px 20px"
-        backgroundColor="rgba(247,249,248,1)"
+        backgroundColor="rgba(249,252,250,1)"
         {...getOverrideProps(overrides, "ExampleOne")}
       >
         <Text

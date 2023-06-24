@@ -13,6 +13,6 @@
     "READ",
     "DELETE"
   ],
-  "triggerFunction": "S3Triggera84e359f",
-  "groupAccess": {}
+  "groupAccess": {},
+  "triggerFunction": "PinesearchUpdate"
 }

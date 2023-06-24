@@ -55,7 +55,7 @@ export default function SearchResults(props) {
         top="483px"
         left="0px"
         padding="0px 0px 0px 0px"
-        backgroundColor="rgba(247,249,248,1)"
+        backgroundColor="rgba(249,252,250,1)"
         {...getOverrideProps(overrides, "Search")}
       >
         <Text
@@ -174,7 +174,7 @@ export default function SearchResults(props) {
           left="701px"
           borderRadius="100px"
           padding="12px 15px 12px 15px"
-          backgroundColor="rgba(0,15,8,1)"
+          backgroundColor="rgba(139,170,173,1)"
           {...getOverrideProps(overrides, "Frame 2")}
         >
           <Text

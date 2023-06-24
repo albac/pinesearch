@@ -5,17 +5,16 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Post } from "../models";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { FlexProps, TextProps } from "@aws-amplify/ui-react";
+import { FlexProps, IconProps, TextProps, ViewProps } from "@aws-amplify/ui-react";
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type TagOverridesProps = {
-    Tag?: PrimitiveOverrideProps<FlexProps>;
-    Science?: PrimitiveOverrideProps<TextProps>;
+export declare type FilterTimeOverridesProps = {
+    FilterTime?: PrimitiveOverrideProps<FlexProps>;
+    "Last 30 days"?: PrimitiveOverrideProps<TextProps>;
+    "ph:caret-down-bold"?: PrimitiveOverrideProps<ViewProps>;
+    Vector?: PrimitiveOverrideProps<IconProps>;
 } & EscapeHatchProps;
-export declare type TagProps = React.PropsWithChildren<Partial<FlexProps> & {
-    post?: Post;
-} & {
-    overrides?: TagOverridesProps | undefined | null;
+export declare type FilterTimeProps = React.PropsWithChildren<Partial<FlexProps> & {
+    overrides?: FilterTimeOverridesProps | undefined | null;
 }>;
-export default function Tag(props: TagProps): React.ReactElement;
+export default function FilterTime(props: FilterTimeProps): React.ReactElement;
