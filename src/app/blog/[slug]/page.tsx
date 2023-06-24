@@ -56,12 +56,19 @@ export default async function blogPage({ params }: BlogPageParams) {
     Storage.get(`${params.slug}.wav`, { level: "public" })
   ]);
 
-  if (
-    mdxFile.status === "fulfilled" &&
-    imageUrl.status === "fulfilled" &&
-    audio_src.status === "fulfilled"
-  ) {
-    const mdxSource = await (await fetch(mdxFile.value)).text();
+  let mdxSource = "";
+  if (mdxFile.status === "rejected") {
+    mdxSource = await (await fetch(mdxFile.value)).text();
+  }
+
+  if (mdxFile.status === "fulfilled") {
+    const file = await Storage.get(`${params.slug}.md`, {
+      level: "public"
+    });
+    mdxSource = await (await fetch(file)).text();
+  }
+
+  if (imageUrl.status === "fulfilled" && audio_src.status === "fulfilled") {
     const imageSrc = imageUrl.value;
     const voice = audio_src.value;
 
