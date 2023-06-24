@@ -1,6 +1,7 @@
 import { SortDirection, withSSRContext } from "aws-amplify";
 import PostItem from "./PostItem";
 import { Post } from "@/models";
+import Tag from "@/components/Tag";
 
 const TAGS = ["Biochemistry", "Medicine", "Neuroscience", "Bioinformatics", "Micro Biology"];
 
@@ -28,9 +29,9 @@ export default async function page() {
         <h2 className="uppercase mt-10 font-semibold text-gray-500 text-xs">Related Topics</h2>
         <div className="mt-8 flex flex-wrap gap-4">
           {TAGS.map((tag) => (
-            <button key={tag} className="rounded-full bg-gray-100 px-3 py-2 text-sm">
+            <Tag key={tag} className="rounded-full bg-gray-100 px-3 py-2 text-sm">
               {tag}
-            </button>
+            </Tag>
           ))}
         </div>
       </form>

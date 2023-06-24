@@ -80,8 +80,11 @@ export default async function blogPage({ params }: BlogPageParams) {
             className="
           max-w-none
           prose
+          prose-headings:font-poping
+          prose-p:font-pt_serif
           prose-headings:leading-tight
           prose-h1:text-3xl
+          prose-h1:text-center
           prose-h1:mb-10
           prose-h2:text-[27px]
           prose-h2:my-[10px]

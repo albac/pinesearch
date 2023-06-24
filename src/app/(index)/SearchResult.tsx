@@ -11,7 +11,7 @@ export default function SearchResult({ queries, result }: ISearchResultProps) {
     <>
       <div className="flex flex-col w-5/6 justify-center p-8 mt-2 border-b border-slate-100">
         <div className="flex w-full items-center">
-          <div className="w-10 h-10 rounded-full border border-custom_gray flex justify-center items-center ">
+          <div className="w-10 h-10 rounded-full border border-fig-gray flex justify-center items-center ">
             <Image src="/icons/user.svg" alt="user" width="20" height="20" />
           </div>
           <p className="ml-4 w-5/6 text-left">{queries[queries.length - 1]}</p>
@@ -22,7 +22,7 @@ export default function SearchResult({ queries, result }: ISearchResultProps) {
         </div>
       </div>
       <div className="w-5/6 px-8 flex items-start my-4">
-        <h3 className="font-semibold uppercase text-xs text-custom_gray">
+        <h3 className="font-semibold uppercase text-xs text-fig-gray">
           Your Question is Answered In These Posts
         </h3>
       </div>
