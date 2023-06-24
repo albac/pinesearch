@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 s3 = boto3.client('s3')
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-dynamodb = boto3.resource('dynamodb')
+dynamodb_client = boto3.client('dynamodb')
 TABLE = 'Post-5d4z66ql5rbmzpdsinuz3tiezy-dev'
 
 
@@ -46,49 +46,31 @@ def handler(event, context):
 
     ts = time.time()
 
-    ts_string = str(ts).replace('.', '')
+    ts_number = str(ts).replace('.', '')
 
     summary_str = str(response['Metadata']['resumen']).split(':')
 
-    iso_date = isoformat_js(datetime(2014, 7, 24, 0, 19, 37, 439000))
+    iso_date = str(isoformat_js(datetime(2014, 7, 24, 0, 19, 37, 439000)))
 
     print('ISO DateTime:', iso_date)
 
+    str_id = str(uuid.uuid4())
+
     item = {
-      "id": {
-        "S": str(uuid.uuid4())
-      },
-      "createdAt": {
-        "S": iso_date
-      },
-      "s3url": {
-        "S": s3url
-      },
-      "summary": {
-        "S": summary_str[1]
-      },
-      "title": {
-        "S": response['Metadata']['titulo']
-      },
-      "updatedAt": {
-        "S": iso_date
-      },
-      "_lastChangedAt": {
-        "N": ts_string
-      },
-      "_version": {
-        "N": "1"
-      },
-      "__typename": {
-        "S": "Post"
-      }
+        'id': {'S': str_id},
+        'createdAt': {'S': iso_date},
+        's3url': {'S': s3url},
+        'summary': {'S': summary_str[1]},
+        'title': {'S': response['Metadata']['titulo']},
+        'updatedAt': {'S': iso_date},
+        '_lastChangedAt': {'N': ts_number},
+        '_version': {'N': '1'},
+        '__typename': {'S': 'Post'}
     }
 
-    # table name
-    table = dynamodb.Table(TABLE)
-
     # inserting values into table
-    response = table.put_item(
+    response = dynamodb_client.put_item(
+       TableName=TABLE,
        Item=item
     )
 
