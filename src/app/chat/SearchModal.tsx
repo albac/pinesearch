@@ -124,7 +124,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
 
   const searchInit = (
     <>
-      <h1 className="mt-24 font-bold text-2xl mb-8">Jackie u&apos;r great</h1>
+      <h1 className="mt-24 font-bold text-2xl mb-8">Examples</h1>
       {defaultSelections.map((selectionText, index) => (
         <Selection key={index} text={selectionText} onSubmitSearch={onSubmitSelect} />
       ))}
