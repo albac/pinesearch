@@ -9,33 +9,21 @@ interface IPostResultProps {
 
 export default function PostResult({ source, text }: IPostResultProps) {
   // Remueve la ruta /tmp/tmpymy2bqal/ del source
-  const formattedSource = source.replace('/tmp/tmpymy2bqal/', '');
+  const formattedSource = source.split("/")[3].split(".")[0];
 
   return (
-    <div className="w-5/6 mb-4 px-8 flex items-center cursor-pointer">
+    <Link
+      className="w-5/6 mb-4 px-8 py-2 flex items-center cursor-pointer  hover:shadow-lg"
+      href={`/blog/${formattedSource}`}
+    >
       <div className="h-24 w-24 relative">
-        <Image 
-          src="/dummy-post.png" 
-          fill={true}
-          alt="post"  
-        />
+        <Image src="/dummy-post.png" fill={true} alt="post" />
       </div>
 
       <div className="flex flex-col h-full ml-8 w-3/4">
-        <Link href={`/blog/${formattedSource}`}>  {/* Usa el componente Link aquí */}
-          <a>
-            <h1 className="font-bold text-left">
-              {formattedSource}
-            </h1>
-          </a>
-        </Link>
-        <p className="text-left text-sm text-ellipsis"> 
-          {text}
-        </p>
+        <h1 className="font-bold text-left">{formattedSource}</h1>
+        <p className="text-left text-sm text-ellipsis">{text}</p>
       </div>
-    </div>
-  )
+    </Link>
+  );
 }
-
-
-  
