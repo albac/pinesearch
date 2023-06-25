@@ -148,12 +148,44 @@ class BlogGenerator:
         base_dir = '/tmp'
         filelocation = os.path.join(base_dir, file_name)
 
+        response = {}
+
+        response['status'] = 'InProgress'
+        response['message'] = 'Cheking content size ..'
+
         if total_blog_count < 2000:
             logger.info("Not enough for a markdown")
+            response['status'] = "failed"
+            response['message'] = "Not enough for a markdown"
         else:
             f = open(filelocation, "w")
             f.write(summary["output_text"])
             f.close()
+
+            source_string = """
+
+            ---
+
+            ### Publication source
+
+            See the PDF from which this article has been generated:
+
+
+            **PDF source url**: [%s](%s)
+
+            ---
+
+            """ % (self.pdf_url, self.pdf_url)
+
+            # Append-adds at last
+            file1 = open(filelocation, "a")  # append mode
+            file1.write(source_string)
+            file1.close()
+
+            response['status'] = 'BlogWritten'
+            response['message'] = 'Blog was written to local disc'
+
+        return response
 
     def remove_header_footer(self, text):
         lines = text.split("\n")
@@ -178,7 +210,7 @@ class BlogGenerator:
             prompt_template = PromptTemplate(input_variables=["text"], template=self.prompt_template_summary)
             summary_2 = openai(prompt_template.format(text=summary["output_text"]))
 
-            self.write_output(summary, self.filename + ".md")
+            response = self.write_output(summary, self.filename + ".md")
             patron = r"Title: (.+)"
             coincidencia = re.search(patron, summary_2)
             titulo = ""

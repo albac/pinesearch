@@ -146,15 +146,45 @@ class BlogGenerator:
 
         logger.info(total_blog_count)
 
+        response = {}
+
+        response['status'] = 'InProgress'
+        response['message'] = 'Cheking content size ..'
+
         base_dir = '/tmp'
         filelocation = os.path.join(base_dir, file_name)
 
         if total_blog_count < 2000:
             logger.info("Not enough for a markdown")
+            response['status'] = "failed"
+            response['message'] = "Not enough for a markdown"
         else:
             f = open(filelocation, "w")
             f.write(summary["output_text"])
             f.close()
+
+            source_string = """
+
+            ---
+
+            ### Publication source
+
+            See the PDF from which this article has been generated:
+
+
+            **PDF source url**: [%s](%s)
+
+            ---
+
+            """ % (self.pdf_url, self.pdf_url)
+
+            # Append-adds at last
+            file1 = open(filelocation, "a")  # append mode
+            file1.write(source_string)
+            file1.close()
+
+            response['status'] = 'BlogWritten'
+            response['message'] = 'Blog was written to local disc'
 
     def remove_header_footer(self, text):
         lines = text.split("\n")
