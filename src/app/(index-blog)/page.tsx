@@ -9,7 +9,7 @@ const TAGS = ["Biochemistry", "Medicine", "Neuroscience", "Bioinformatics", "Mic
 const getPosts = async () => {
   const { DataStore } = withSSRContext();
   const posts = await DataStore.query(Post, (c: any) => c, {
-    sort: (s: any) => s.updatedAt(SortDirection.DESCENDING)
+    sort: (s: any) => s.createdAt(SortDirection.DESCENDING)
   });
 
   return posts;
