@@ -28,7 +28,7 @@
         },
         "PinesearchUpdate": {
           "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
-          "s3Key": "amplify-builds/PinesearchUpdate-4576662b673242315757-build.zip"
+          "s3Key": "amplify-builds/PinesearchUpdate-7059754f37714e2b5171-build.zip"
         }
       },
       "storage": {
