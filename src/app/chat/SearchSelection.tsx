@@ -6,7 +6,7 @@ interface ISelectionProps {
 export default function SearchSelection({ text, onSubmitSearch }: ISelectionProps) {
   return (
     <div
-      className="flex px-4 lg:px-6 bg-slate-100 rounded-3xl w-10/12 sm:w-7/12 lg:w-1/2 py-2 items-center justify-between mb-4 cursor-pointer"
+      className="flex px-4 lg:px-6 bg-slate-100 rounded-3xl w-10/12 sm:w-7/12 lg:w-1/2 py-2 lg:py-5 items-center justify-between mb-4 cursor-pointer"
       onClick={() => onSubmitSearch(text)}
     >
       <p className="text-left w-3/4">{text}</p>
