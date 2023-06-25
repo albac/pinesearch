@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: BlogPageParams) {
   }
 
   return {
-    title: post[0].title,
+    title: `PineSearch - ${post[0].title}`,
     description: post[0].summary
   };
 }

@@ -10,7 +10,10 @@ export default function SearchModalFooter({
   setQuery
 }: ISearchModalFooterProps) {
   return (
-    <div className="h-16 min-h-[64px] w-full bg-slate-100 flex items-center sticky bottom-0 mt-auto rounded-b-3xl px-4">
+    <form
+      onSubmit={onSubmitSearch}
+      className="h-16 min-h-[64px] w-full bg-slate-100 flex items-center sticky bottom-0 mt-auto rounded-b-3xl px-4"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -32,9 +35,9 @@ export default function SearchModalFooter({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <div
+      <button
+        type="submit"
         className="rounded-full bg-black h-10 w-10 flex items-center justify-center ml-auto cursor-pointer"
-        onClick={onSubmitSearch}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +53,7 @@ export default function SearchModalFooter({
             d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
           />
         </svg>
-      </div>
-    </div>
+      </button>
+    </form>
   );
 }

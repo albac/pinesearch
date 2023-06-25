@@ -1,6 +1,7 @@
 import { SignInButton, SignOutButton, SignUpButton, currentUser } from "@clerk/nextjs";
 import Link from "next/link";
 import StarLogoIcon from "../../public/icons/StarLogoIcon";
+import Image from "next/image";
 
 export default async function Navbar() {
   const user = await currentUser();
@@ -12,8 +13,7 @@ export default async function Navbar() {
           href="/"
           className="text-center text-2xl font-bold flex items-center justify-center gap-2"
         >
-          <StarLogoIcon />
-          <span>PineSearch</span>
+          <Image src="/PinesearchLogo.png" width={171} height={36} alt="logo" />
         </Link>
         <div className="mt-5 flex flex-col items-center text-center sm:mt-0 sm:flex-row sm:space-x-4">
           <button>How does it work?</button>
