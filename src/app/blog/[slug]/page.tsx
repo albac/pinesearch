@@ -79,6 +79,7 @@ export default async function blogPage({ params }: BlogPageParams) {
           <article
             className="
           max-w-none
+          overflow-hidden
           prose
           prose-headings:font-poping
           prose-p:font-pt_serif
@@ -96,8 +97,9 @@ export default async function blogPage({ params }: BlogPageParams) {
           md:prose-h1:text-4xl
           lg:prose-h2:text-3xl
           lg:prose-h1:text-5xl
+          px-4
           py-4
-          px-8
+          sm:px-8
           md:py-6
           md:px-12
           lg:py-8
