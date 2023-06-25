@@ -7,7 +7,9 @@
 export { default as SearchResult } from "./SearchResult";
 export { default as NavBar } from "./NavBar";
 export { default as FilterTime } from "./FilterTime";
+export { default as Comments } from "./Comments";
 export { default as Tag } from "./Tag";
+export { default as ShareRequirement } from "./ShareRequirement";
 export { default as NavbarResults } from "./NavbarResults";
 export { default as AIChat } from "./AIChat";
 export { default as SearchPopup } from "./SearchPopup";

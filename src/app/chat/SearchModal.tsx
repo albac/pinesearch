@@ -89,11 +89,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         setQuery(text);
       }
 
-      const serverBaseUrl = process.env.TEST_DEPLOY
-        ? "https://wwww.pinesearch.io"
-        : "http://localhost:3000";
-
-      const response = await fetch(`${serverBaseUrl}/api/read`, {
+      const response = await fetch(`/api/read`, {
         method: "POST",
         body: JSON.stringify({ question: isExampleQuery ? text : query })
       });
