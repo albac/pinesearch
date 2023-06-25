@@ -47,7 +47,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         @param text - optional - the query when a user has clicked on
         an example search.
     */
-  const onSubmitSearch = async (e: React.FormEvent, text?: string) => {
+  const onSubmitSearch = async (e?: React.FormEvent, text?: string) => {
     e.preventDefault();
 
     try {
