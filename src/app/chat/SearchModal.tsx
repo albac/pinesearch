@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from 'react';
 import { useState } from "react";
 import SearchModalFooter from "./SearchModalFooter";
 import SearchResult from "./SearchResult";
@@ -22,7 +22,8 @@ interface ISearchModalProps {
 export default function SearchModal({ closeModal }: ISearchModalProps) {
   const [query, setQuery] = useState("");
   const [queries, setQueries] = useState<Array<string>>([]);
-  const [result, setResult] = useState<string | null>(null);
+  const [resultString, setResultString] = useState<string | null>(null);
+  const [resultArray, setResultArray] = useState<Array<{ source: string; text: string }> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   /*
@@ -30,14 +31,32 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         @param result - the answer to the query from pinecone
         @param currentQuery -  the current query of the user
     */
-  const updateSearchState = (result: string, currentQuery: string) => {
-    setResult(result);
-
+ 
+  
+  const updateSearchState = (result: { resultString: string, resultArray: Array<{ source: string; text: string }> }, currentQuery: string) => {
+    const { resultString, resultArray } = result;
+  
+    console.log('Result type: ', typeof result);
+    console.log('Result: ', result);
+    console.log('Result String: ', resultString);
+    console.log('Result Array: ', resultArray);
+  
+ 
+    if (resultString) {
+      setResultString(resultString);
+    }
+    
+    if (resultArray) {
+      setResultArray(resultArray);
+    }
+    
+  
     const updatedQueries = [...queries, currentQuery];
     setQueries(updatedQueries);
     setQuery("");
     setIsLoading(false);
   };
+  
 
   /*
         Submit a search to pinecone. A user can either enter a query
@@ -47,10 +66,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         @param text - optional - the query when a user has clicked on
         an example search.
     */
-
-  const onSubmitSearch = async (e?: React.FormEvent, text?: string) => {
-    e?.preventDefault();
-
+  const onSubmitSearch = async (text?: string) => {
     try {
       setIsLoading(true);
 
@@ -61,37 +77,24 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         setQuery(text);
       }
 
-      const response = await fetch(`/api/read`, {
+      // const serverBaseUrl = process.env.TEST_DEPLOY
+      //   ? "https://main.d6qm6fb1j4see.amplifyapp.com"
+      //   : "http://localhost:3000";
+      const serverBaseUrl = "http://localhost:3000";
+      console.log('Antes del Fetch en SearchModal.tsx');
+
+      const response = await fetch(`${serverBaseUrl}/api/read`, {
         method: "POST",
         body: JSON.stringify({ question: isExampleQuery ? text : query })
       });
-
-      const result = await response.json();
-      updateSearchState(result.data, isExampleQuery ? text : query);
-    } catch (e) {
-      setIsLoading(false);
-      const typedError = e as Error;
-      console.log("Error submitting search - ", typedError.message);
-    }
-  };
-
-  const onSubmitSelect = async (text?: string) => {
-    try {
-      setIsLoading(true);
-
-      // Make sure text isn't being set as e (synthetic event)
-      const isExampleQuery = text && typeof text === "string";
-
-      if (isExampleQuery) {
-        setQuery(text);
+      console.log('Despues del Fetch en SearchModal.tsx');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const response = await fetch(`/api/read`, {
-        method: "POST",
-        body: JSON.stringify({ question: isExampleQuery ? text : query })
-      });
-
       const result = await response.json();
+      console.log('Result en SearchModal.tsx');
+      console.log(result);
       updateSearchState(result.data, isExampleQuery ? text : query);
     } catch (e) {
       setIsLoading(false);
@@ -107,14 +110,14 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
 
   const searchInit = (
     <>
-      <h1 className="mt-24 font-bold text-2xl mb-8">Examples</h1>
+     <h1 className="mt-24 font-bold text-2xl mb-8">Jackie u'r great</h1>
       {defaultSelections.map((selectionText, index) => (
-        <Selection key={index} text={selectionText} onSubmitSearch={onSubmitSelect} />
+        <Selection key={index} text={selectionText} onSubmitSearch={onSubmitSearch} />
       ))}
     </>
   );
 
-  const searchResult = <SearchResult queries={queries} result={result} />;
+  const searchResult = <SearchResult queries={queries} resultString={resultString} resultArray={resultArray} />;
 
   // determine which component to display
   // if we're loading display spinner.
@@ -122,9 +125,9 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
   let loadedComponent = null;
 
   if (!isLoading) {
-    loadedComponent = !result ? searchInit : searchResult;
+    loadedComponent = !resultString && !resultArray ? searchInit : searchResult;
   }
-
+  
   return (
     <div
       className="h-full w-full bg-slate-600 bg-opacity-50 z-10 absolute top-0 left-0 flex flex-col justify-center items-center"
