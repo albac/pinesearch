@@ -1,6 +1,6 @@
 import Image from "next/image";
 import PostResult from "./PostResult";
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 interface ISearchResultProps {
   queries: Array<string>;
@@ -9,8 +9,6 @@ interface ISearchResultProps {
 }
 
 export default function SearchResult({ queries, resultString, resultArray }: ISearchResultProps) {
-
-
   return (
     <>
       <div className="flex flex-col w-5/6 justify-center pt-5 sm:p-8 mt-2 border-b border-slate-100">
@@ -23,7 +21,6 @@ export default function SearchResult({ queries, resultString, resultArray }: ISe
         <div className="sm:flex w-full mt-8 mb-5">
           <Image src="/icons/AI.svg" alt="user" width="40" height="40" className="h-10" />
           {resultString && <p className="sm:ml-4 mt-2 sm:mt-0 w-full text-left">{resultString}</p>}
-          
         </div>
       </div>
       <div className="w-5/6 sm:px-8 flex items-start my-4">
@@ -33,11 +30,9 @@ export default function SearchResult({ queries, resultString, resultArray }: ISe
       </div>
       {/* dummy post results for now */}
       {resultArray &&
-    resultArray.map((item, index) => (
-      <PostResult key={index} source={item.source} text={item.text} />
-  ))}
+        resultArray.map((item, index) => (
+          <PostResult key={index} source={item.source} text={item.text} />
+        ))}
     </>
   );
 }
-
-

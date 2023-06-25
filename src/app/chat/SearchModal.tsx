@@ -71,9 +71,8 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         @param text - optional - the query when a user has clicked on
         an example search.
     */
-  const onSubmitSearch = async (e?: React.FormEvent, text?: string) => {
-    e?.preventDefault();
 
+  const getResponse = async (text: string) => {
     try {
       setIsLoading(true);
 
@@ -90,6 +89,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
       });
 
       const result = await response.json();
+
       updateSearchState(result.data, isExampleQuery ? text : query);
     } catch (e) {
       setIsLoading(false);
@@ -98,34 +98,19 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
     }
   };
 
+  const onSubmitSearch = async (e?: React.FormEvent, text?: string) => {
+    e?.preventDefault();
+
+    await getResponse(text ?? "");
+  };
+
   const onSubmitSelect = async (text?: string) => {
-    try {
-      setIsLoading(true);
-
-      // Make sure text isn't being set as e (synthetic event)
-      const isExampleQuery = text && typeof text === "string";
-
-      if (isExampleQuery) {
-        setQuery(text);
-      }
-
-      const response = await fetch(`/api/read`, {
-        method: "POST",
-        body: JSON.stringify({ question: isExampleQuery ? text : query })
-      });
-
-      const result = await response.json();
-      updateSearchState(result.data, isExampleQuery ? text : query);
-    } catch (e) {
-      setIsLoading(false);
-      const typedError = e as Error;
-      console.log("Error submitting search - ", typedError.message);
-    }
+    await getResponse(text ?? "");
   };
 
   const searchInit = (
     <>
-      <h1 className="mt-24 font-bold text-2xl mb-8">Jackie u'r great</h1>
+      <h1 className="mt-24 font-bold text-2xl mb-8">Jackie u&apos;r great</h1>
       {defaultSelections.map((selectionText, index) => (
         <Selection key={index} text={selectionText} onSubmitSearch={onSubmitSelect} />
       ))}
