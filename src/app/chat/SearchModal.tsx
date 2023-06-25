@@ -59,7 +59,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
       }
 
       const serverBaseUrl = process.env.TEST_DEPLOY
-        ? "https://pinesearch.io"
+        ? "https://wwww.pinesearch.io"
         : "http://localhost:3000";
 
       const response = await fetch(`${serverBaseUrl}/api/read`, {
