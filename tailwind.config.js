@@ -20,6 +20,9 @@ module.exports = {
         "fig-teal": "#8BAAAD",
         "fig-ligth-mint": "#F9FCFA",
         "fig-grey-mint": "#F2F5F4"
+      },
+      screens: {
+        mdplus: "820px"
       }
     }
   },
