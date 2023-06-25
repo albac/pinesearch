@@ -155,6 +155,26 @@ class BlogGenerator:
             f.write(summary["output_text"])
             f.close()
 
+            source_string = """
+
+            ---
+
+            ### Publication source
+
+            See the PDF from which this article has been generated:
+
+
+            **PDF source url**: [%s](%s)
+
+            ---
+
+            """ % (self.pdf_url, self.pdf_url)
+
+            # Append-adds at last
+            file1 = open(filelocation, "a")  # append mode
+            file1.write(source_string)
+            file1.close()
+
     def remove_header_footer(self, text):
         lines = text.split("\n")
         if len(lines) > 2:  # Ensure there are header and footer to remove
