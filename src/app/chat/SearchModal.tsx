@@ -48,7 +48,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         an example search.
     */
   const onSubmitSearch = async (e?: React.FormEvent, text?: string) => {
-    e.preventDefault();
+    e?.preventDefault();
 
     try {
       setIsLoading(true);
