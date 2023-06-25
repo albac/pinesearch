@@ -47,7 +47,35 @@ class BlogGenerator:
             "pinecone_index": self.pinecone_index,
             "bucket_name": self.bucket_name
         }
-            
+
+    def get_keywords(self, pages):
+
+        # Extract keywords from each page
+        keywords = []
+        for page in pages:
+            keywords += page.page_content.split()
+
+        # Count the frequency of each keyword
+        keyword_counts = {}
+        for keyword in keywords:
+            if keyword in keyword_counts:
+                keyword_counts[keyword] += 1
+            else:
+                keyword_counts[keyword] = 1
+
+        # Sort the keywords by frequency in descending order
+        sorted_keywords = sorted(keyword_counts.items(), key=lambda x: x[1], reverse=True)
+
+        # Get the top 5 keywords
+        top_keywords = [keyword for keyword, count in sorted_keywords[:5]]
+
+        # Print the top 5 keywords
+        print("Top 5 keywords:")
+
+        tagkeys = ','.join(top_keywords)
+
+        return tagkeys
+
     def load_and_process_pdf(self):
         loader = PyPDFLoader(self.pdf_url)
         pages = loader.load_and_split()
@@ -186,6 +214,8 @@ class BlogGenerator:
             response['status'] = 'BlogWritten'
             response['message'] = 'Blog was written to local disc'
 
+        return response
+
     def remove_header_footer(self, text):
         lines = text.split("\n")
         if len(lines) > 2:  # Ensure there are header and footer to remove
@@ -214,7 +244,9 @@ class BlogGenerator:
             prompt_template = PromptTemplate(input_variables=["text"], template=self.prompt_template_summary)
             summary_2 = openai(prompt_template.format(text=summary["output_text"]))
 
-            self.write_output(summary, self.filename + ".md")
+            response = self.write_output(summary, self.filename + ".md")
+            if response['status'] == 'failed':
+                return response
             patron = r"Title: (.+)"
             coincidencia = re.search(patron, summary_2)
             titulo = ""
@@ -223,7 +255,13 @@ class BlogGenerator:
                 logger.info(titulo)
             header_cleaned = summary_2.replace("\n", " ")
 
-            metadata = {"titulo": titulo, "url": self.pdf_url, "resumen": header_cleaned}
+            tagkeys = self.get_keywords(texts)
+
+            metadata = {"titulo": titulo,
+                    "url": self.pdf_url,
+                    "resumen": header_cleaned,
+                    "keywords": tagkeys}
+
             cleaned_metadata = {k: v.encode("ascii", "ignore").decode("ascii") for k, v in metadata.items()}
             key = "public/mdx/" + self.filename + ".md"
             file_name = self.filename + ".md"

@@ -36,9 +36,18 @@ The output should be a markdown format. Text context information is bellow:
 
 prompt_template_combined = """Write a blog with one main title, subtitles and large subtitle if required, provide any contact info if exist.
 Do no use Summary or Contact as main title. The output should be a markdown format.
+Also highlight any important keywords. Use markdown emoji markup when it makes sense.
 Mention only one date of publication for the whole blog. Text context information is bellow:
 {text}
 """
+
+# prompt_template_combined = """Write a blog post in markdown format with a main title, subtitles, and a large subtitle if necessary. If there is any contact information available, please include it. Please avoid using "Summary" or "Contact" as the main title. Additionally, make sure to highlight any important keywords using markdown emoji markup when appropriate. Lastly, provide a single date of publication for the entire blog post.
+#
+# Context:
+# Text context information is provided below.
+# {text}
+# """
+
 
 prompt_template_summary = """Write a summary of the following article while preserving the first line as the article's title.
 The output should have the following structure: 'Title' followed by a line break, then the obtained title, followed by another line break, and finally, a concise summary of no more than 200 characters. Ensure that the summary ends with a complete idea. The 'Title' part should be preceded by the word 'Title,' followed by a line break, the obtained title, another line break, and the concise summary. Text context information is bellow:
