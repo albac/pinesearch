@@ -6,6 +6,9 @@ import SearchResult from "./SearchResult";
 import Selection from "./SearchSelection";
 import PulseLoader from "react-spinners/PulseLoader";
 import { Amplify } from "aws-amplify";
+import awsconfig from "../../aws-exports";
+
+Amplify.configure(awsconfig);
 
 /*
     Default search choices for the user.
