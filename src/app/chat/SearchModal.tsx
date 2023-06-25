@@ -89,8 +89,22 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
       });
 
       const result = await response.json();
+      let { resultString, resultArray } = result.data;
 
-      updateSearchState(result.data, isExampleQuery ? text : query);
+      const uniqueItems: { [key: string]: boolean } = {};
+      const uniqueResultArray = resultArray.reduce((acc: any[], item: any) => {
+        const { source } = item;
+        if (!uniqueItems[source]) {
+          uniqueItems[source] = true;
+          acc.push(item);
+        }
+        return acc;
+      }, []);
+
+      updateSearchState(
+        { resultString, resultArray: uniqueResultArray },
+        isExampleQuery ? text : query
+      );
     } catch (e) {
       setIsLoading(false);
       const typedError = e as Error;
