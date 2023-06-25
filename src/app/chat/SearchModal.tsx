@@ -5,6 +5,10 @@ import SearchModalFooter from "./SearchModalFooter";
 import SearchResult from "./SearchResult";
 import Selection from "./SearchSelection";
 import PulseLoader from "react-spinners/PulseLoader";
+import { Amplify } from "aws-amplify";
+import awsconfig from "../../aws-exports";
+
+Amplify.configure(awsconfig);
 
 /*
     Default search choices for the user.
@@ -22,7 +26,10 @@ interface ISearchModalProps {
 export default function SearchModal({ closeModal }: ISearchModalProps) {
   const [query, setQuery] = useState("");
   const [queries, setQueries] = useState<Array<string>>([]);
-  const [result, setResult] = useState<string | null>(null);
+  const [resultString, setResultString] = useState<string | null>(null);
+  const [resultArray, setResultArray] = useState<Array<{ source: string; text: string }> | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   /*
@@ -30,8 +37,25 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         @param result - the answer to the query from pinecone
         @param currentQuery -  the current query of the user
     */
-  const updateSearchState = (result: string, currentQuery: string) => {
-    setResult(result);
+
+  const updateSearchState = (
+    result: { resultString: string; resultArray: Array<{ source: string; text: string }> },
+    currentQuery: string
+  ) => {
+    const { resultString, resultArray } = result;
+
+    console.log("Result type: ", typeof result);
+    console.log("Result: ", result);
+    console.log("Result String: ", resultString);
+    console.log("Result Array: ", resultArray);
+
+    if (resultString) {
+      setResultString(resultString);
+    }
+
+    if (resultArray) {
+      setResultArray(resultArray);
+    }
 
     const updatedQueries = [...queries, currentQuery];
     setQueries(updatedQueries);
@@ -48,73 +72,68 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
         an example search.
     */
 
+  const getResponse = async (text: string) => {
+    try {
+      setIsLoading(true);
+
+      // Make sure text isn't being set as e (synthetic event)
+      const isExampleQuery = text && typeof text === "string";
+
+      if (isExampleQuery) {
+        setQuery(text);
+      }
+
+      const response = await fetch(`/api/read`, {
+        method: "POST",
+        body: JSON.stringify({ question: isExampleQuery ? text : query })
+      });
+
+      const result = await response.json();
+      let { resultString, resultArray } = result.data;
+
+      const uniqueItems: { [key: string]: boolean } = {};
+      const uniqueResultArray = resultArray.reduce((acc: any[], item: any) => {
+        const { source } = item;
+        if (!uniqueItems[source]) {
+          uniqueItems[source] = true;
+          acc.push(item);
+        }
+        return acc;
+      }, []);
+
+      updateSearchState(
+        { resultString, resultArray: uniqueResultArray },
+        isExampleQuery ? text : query
+      );
+    } catch (e) {
+      setIsLoading(false);
+      const typedError = e as Error;
+      console.log("Error submitting search - ", typedError.message);
+    }
+  };
+
   const onSubmitSearch = async (e?: React.FormEvent, text?: string) => {
     e?.preventDefault();
 
-    try {
-      setIsLoading(true);
-
-      // Make sure text isn't being set as e (synthetic event)
-      const isExampleQuery = text && typeof text === "string";
-
-      if (isExampleQuery) {
-        setQuery(text);
-      }
-
-      const response = await fetch(`/api/read`, {
-        method: "POST",
-        body: JSON.stringify({ question: isExampleQuery ? text : query })
-      });
-
-      const result = await response.json();
-      updateSearchState(result.data, isExampleQuery ? text : query);
-    } catch (e) {
-      setIsLoading(false);
-      const typedError = e as Error;
-      console.log("Error submitting search - ", typedError.message);
-    }
+    await getResponse(text ?? "");
   };
 
   const onSubmitSelect = async (text?: string) => {
-    try {
-      setIsLoading(true);
-
-      // Make sure text isn't being set as e (synthetic event)
-      const isExampleQuery = text && typeof text === "string";
-
-      if (isExampleQuery) {
-        setQuery(text);
-      }
-
-      const response = await fetch(`/api/read`, {
-        method: "POST",
-        body: JSON.stringify({ question: isExampleQuery ? text : query })
-      });
-
-      const result = await response.json();
-      updateSearchState(result.data, isExampleQuery ? text : query);
-    } catch (e) {
-      setIsLoading(false);
-      const typedError = e as Error;
-      console.log("Error submitting search - ", typedError.message);
-    }
+    await getResponse(text ?? "");
   };
-
-  // We have 3 components to display:
-  // 1. searchInit -> initial search screen
-  // 2. searchResult -> the search result from pinecone
-  // 3. loading spinner -> loading the answer from pinecone
 
   const searchInit = (
     <>
-      <h1 className="mt-24 font-bold text-2xl mb-8">Examples</h1>
+      <h1 className="mt-24 font-bold text-2xl mb-8">Jackie u&apos;r great</h1>
       {defaultSelections.map((selectionText, index) => (
         <Selection key={index} text={selectionText} onSubmitSearch={onSubmitSelect} />
       ))}
     </>
   );
 
-  const searchResult = <SearchResult queries={queries} result={result} />;
+  const searchResult = (
+    <SearchResult queries={queries} resultString={resultString} resultArray={resultArray} />
+  );
 
   // determine which component to display
   // if we're loading display spinner.
@@ -122,7 +141,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
   let loadedComponent = null;
 
   if (!isLoading) {
-    loadedComponent = !result ? searchInit : searchResult;
+    loadedComponent = !resultString && !resultArray ? searchInit : searchResult;
   }
 
   return (

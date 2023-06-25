@@ -95,19 +95,19 @@ export const updatePinecone = async (client: any, docs: any) => {
 };
 
 export const queryPineconeVectorStoreAndQueryLLM = async (client: any, question: any) => {
-  console.log("Querying Pinecone vector store...");
+  console.log("Consultando el vector store de Pinecone...");
   console.log(question);
-  // retrieve the index
+  // Obtener el índice
   const index = client.Index(indexName);
   console.log("0");
 
-  console.log(`openai key: ${process.env.OPENAI_API_KEY}`);
-  // create query embedding
+  console.log(`Clave de OpenAI: ${process.env.OPENAI_API_KEY}`);
+  // Crear un embedding para la consulta
   const queryEmbedding = await new OpenAIEmbeddings({
     openAIApiKey: process.env.OPENAI_API_KEY
   }).embedQuery(question);
   console.log("1");
-  // query pinecone
+  // Consultar a Pinecone
   const queryResponse = await index.query({
     queryRequest: {
       topK: 10,
@@ -118,18 +118,21 @@ export const queryPineconeVectorStoreAndQueryLLM = async (client: any, question:
   });
   console.log("2");
   const matchesFound = queryResponse.matches.length;
+  const matches = queryResponse.matches;
+  const matchedDocsMetadata = matches.map((match: any) => match.metadata);
+  console.log(`matchedDocsMetadata ${matchedDocsMetadata} matches...`);
+  console.dir(matchedDocsMetadata[0]);
+  console.log(`Se encontraron ${matchesFound} coincidencias...`);
 
-  console.log(`Found ${matchesFound} matches...`);
-
-  console.log(`openai key: ${process.env.OPENAI_API_KEY}`);
+  console.log(`Clave de OpenAI: ${process.env.OPENAI_API_KEY}`);
 
   if (matchesFound) {
     const llm = new OpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY
+      openAIApiKey: process.env.OPENAI_API_KEY,temperature: 0
     });
     const chain = loadQAStuffChain(llm);
 
-    // extract and concatenate page content from matched documents
+    // Extraer y concatenar el contenido de las páginas de los documentos coincidentes
     const concatenatedPageContent = queryResponse.matches
       .map((match: any) => match.metadata.pageContent)
       .join(" ");
@@ -139,6 +142,15 @@ export const queryPineconeVectorStoreAndQueryLLM = async (client: any, question:
       question
     });
 
-    return result.text;
+    return {
+      resultString: result.text,
+      resultArray: matchedDocsMetadata,
+    };
   }
+
+  return {
+    resultString: null,
+    resultArray: [],
+  };
 };
+

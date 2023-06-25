@@ -1,27 +1,46 @@
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+// En PostResult.tsx
+"use client";
 
-export default function PostResult() {
-  const router = useRouter();
+import { Storage } from "aws-amplify";
+import Image from "next/image";
+import Link from "next/link"; // Importa el componente Link
+import { useEffect, useState } from "react";
+
+interface IPostResultProps {
+  source: string;
+  text: string;
+}
+
+export default function PostResult({ source, text }: IPostResultProps) {
+  // Remueve la ruta /tmp/tmpymy2bqal/ del source
+  const formattedSource = source.split("/")[3].split(".")[0];
+
+  const [image, setImage] = useState("");
+
+  const getUploadedImage = async () => {
+    const file = await Storage.get(formattedSource + ".webp", {
+      level: "public"
+    });
+    setImage(file);
+  };
+
+  useEffect(() => {
+    getUploadedImage();
+  }, []);
 
   return (
-    <div
-      className="w-5/6 mb-4 sm:px-8 sm:flex sm:gap-10 mt-3 sm:mt-0 sm:items-center cursor-pointer"
-      onClick={() => router.push("/blog/test")}
+    <Link
+      className="w-5/6 mb-4 px-8 py-2 flex items-center cursor-pointer  hover:shadow-lg"
+      href={`/blog/${formattedSource}`}
     >
       <div className="h-24 w-24 relative">
-        <Image src="/dummy-post.png" fill={true} alt="post" />
+        {image && <Image src={image} fill={true} alt="post" />}
       </div>
 
-      <div className="ml-0 w-3/4 mt-3 sm:mt-0">
-        <h1 className="font-bold text-left">
-          Exploring the Role of Gut Microbiota in Human Metabolism and Disease
-        </h1>
-        <p className="text-left text-sm text-ellipsis">
-          Explores the ecological consequences of microplastic pollution on aquatic ecosystems. This
-          research investigates how microplastics, tiny plastic...
-        </p>
+      <div className="flex flex-col h-full ml-8 w-3/4">
+        <h1 className="font-bold text-left">{formattedSource}</h1>
+        <p className="text-left text-sm text-ellipsis">{text}</p>
       </div>
-    </div>
+    </Link>
   );
 }
