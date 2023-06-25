@@ -50,7 +50,7 @@ def handler(event, context):
 
     summary_str = str(response['Metadata']['resumen']).split(':')
 
-    iso_date = str(isoformat_js(datetime(2014, 7, 24, 0, 19, 37, 439000)))
+    iso_date = str(isoformat_js(datetime.now()))
 
     print('ISO DateTime:', iso_date)
 
