@@ -29,7 +29,6 @@ export default async function PostItem({ post }: { post: any }) {
             </p>
             <h2 className="font-semibold text-[22px] font-poping leading-tight">{title}</h2>
             <p className="mt-2 font-pt_serif">{summary}</p>
-            <Tag className="mt-2 rounded-full bg-gray-100 px-2.5 py-1 inline-block">Biology</Tag>
           </div>
         </article>
       </Link>
