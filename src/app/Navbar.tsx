@@ -16,7 +16,7 @@ export default async function Navbar() {
           <Image src="/PinesearchLogo.png" width={171} height={36} alt="logo" />
         </Link>
         <div className="mt-5 flex flex-col items-center text-center sm:mt-0 sm:flex-row sm:space-x-4">
-          <button>How does it work?</button>
+          <Link href="/how-it-work">How does it work?</Link>
           {!user ? (
             <>
               <div className="mt-2 sm:mt-0">

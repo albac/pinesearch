@@ -1,7 +1,6 @@
 import { SortDirection, withSSRContext } from "aws-amplify";
 import PostItem from "./PostItem";
 import { Post } from "@/models";
-import SearchForm from "../chat/SearchForm";
 import SearchComponent from "./SearchComponent";
 
 const TAGS = ["Biochemistry", "Medicine", "Neuroscience", "Bioinformatics", "Micro Biology"];
@@ -24,6 +23,9 @@ export default async function page() {
       </div>
 
       <div className="mdplus:w-8/12 mdplus:border-l mdplus:pl-10 pt-10 mdplus:pt-0 space-y-5">
+        <h1 className="font-poping font-bold text-2xl sm:text-4xl">
+          Current Posts: {posts.length}
+        </h1>
         {posts.map((post: any) => (
           <PostItem key={post.s3url} post={post} />
         ))}

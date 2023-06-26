@@ -4,6 +4,7 @@ import { authMiddleware, redirectToSignIn } from "@clerk/nextjs";
 const publicRoutes = [
   "/",
   "/blog",
+  "/how-it-work",
   "/blog/:slug",
   "/auth/sign-in",
   "/auth/sign-up",
