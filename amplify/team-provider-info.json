@@ -29,6 +29,12 @@
         "PinesearchUpdate": {
           "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
           "s3Key": "amplify-builds/PinesearchUpdate-7059754f37714e2b5171-build.zip"
+        },
+        "zapierIntegration": {
+          "zapierApiKey": "sk-ak-wuPjWos7XyXa4HOVOz6ObVrTs",
+          "zaperActionDiscordId": "01H3N0XGT8R7H06WQR3P6NM1CX",
+          "deploymentBucketName": "amplify-pinesearch-dev-101145-deployment",
+          "s3Key": "amplify-builds/zapierIntegration-5932356d7a376758394c-build.zip"
         }
       },
       "storage": {

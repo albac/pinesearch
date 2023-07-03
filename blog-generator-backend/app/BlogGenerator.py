@@ -93,10 +93,16 @@ class BlogGenerator:
 
         for doc in data:
             doc.page_content = self.remove_header_footer(doc.page_content)
-        logger.info(f"You have {len(data)} document(s) in your data")
-        logger.info(f"There are {len(data[0].page_content)} characters in your document")
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-        texts = text_splitter.split_documents(data)
+
+        try:
+            logger.info(f"You have {len(data)} document(s) in your data")
+            logger.info(f"There are {len(data[0].page_content)} characters in your document")
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+            texts = text_splitter.split_documents(data)
+        except Exception as e:
+            logger.info(f"Error to load document: {e}")
+            raise Exception('Error to load document: %s' % e)
+
         logger.info(f"Now you have {len(texts)} documents")
         return texts
 
@@ -182,7 +188,7 @@ class BlogGenerator:
         base_dir = '/tmp'
         filelocation = os.path.join(base_dir, file_name)
 
-        if total_blog_count < 2000:
+        if total_blog_count < 1500:
             logger.info("Not enough for a markdown")
             response['status'] = "failed"
             response['message'] = "Not enough for a markdown"
@@ -234,13 +240,19 @@ class BlogGenerator:
             index = pinecone.Index(self.pinecone_index)
             logger.info(index)
             index.delete(deleteAll="true")
-
             vectordb = self.create_pinecone_vector_extra(texts)
             PROMPT = PromptTemplate(template=self.prompt_template, input_variables=["text"])
             PROMPT_COMBINED = PromptTemplate(template=self.prompt_template_combined, input_variables=["text"])
             chain = self.create_chain(self.llm, PROMPT, PROMPT_COMBINED)
             summary = self.run_chain(chain, vectordb)
-            openai = OpenAI(model_name="text-davinci-003", temperature=0)
+
+        except Exception as e:
+            response['message'] = f"An error |1s PART| occurred: {str(e)}"
+            response['status'] = 'failed'
+            logger.info(response['message'])
+
+        try:
+            openai = OpenAI(model_name="gpt-3.5-turbo-16k", temperature=0)
             prompt_template = PromptTemplate(input_variables=["text"], template=self.prompt_template_summary)
             summary_2 = openai(prompt_template.format(text=summary["output_text"]))
 
@@ -275,7 +287,7 @@ class BlogGenerator:
             response['message'] = 'Blog creation completed!'
 
         except Exception as e:
-            response['message'] = f"An error occurred: {str(e)}"
+            response['message'] = f"An error |2nd part| occurred: {str(e)}"
             response['status'] = 'failed'
             logger.info(response['message'])
 
