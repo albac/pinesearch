@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "storage": {
+      "pineblogs": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Post:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "secretNames": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "zapierApiKey",
+      "environmentVariableName": "ZAPIER_API_KEY"
+    },
+    {
+      "cloudFormationParameterName": "zaperActionDiscordId",
+      "environmentVariableName": "ZAPER_ACTION_DISCORD_ID"
+    }
+  ]
+}

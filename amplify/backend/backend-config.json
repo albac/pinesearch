@@ -96,6 +96,35 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "zapierIntegration": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ],
+          "category": "api",
+          "resourceName": "pinesearch"
+        },
+        {
+          "attributes": [
+            "BucketName"
+          ],
+          "category": "storage",
+          "resourceName": "pineblogs"
+        },
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
+          ],
+          "category": "api",
+          "resourceName": "pinesearch"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "hosting": {
@@ -167,6 +196,38 @@
         {
           "category": "function",
           "resourceName": "PinesearchUpdate"
+        }
+      ]
+    },
+    "AMPLIFY_function_zapierIntegration_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "zapierIntegration"
+        }
+      ]
+    },
+    "AMPLIFY_function_zapierIntegration_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "zapierIntegration"
+        }
+      ]
+    },
+    "AMPLIFY_function_zapierIntegration_zaperActionDiscordId": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "zapierIntegration"
+        }
+      ]
+    },
+    "AMPLIFY_function_zapierIntegration_zapierApiKey": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "zapierIntegration"
         }
       ]
     },

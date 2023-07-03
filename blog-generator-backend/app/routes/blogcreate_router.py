@@ -36,7 +36,6 @@ The output should be a markdown format. Text context information is bellow:
 
 prompt_template_combined = """Write a blog with one main title, subtitles and large subtitle if required, provide any contact info if exist.
 Do no use Summary or Contact as main title. The output should be a markdown format.
-Also highlight any important keywords. Use markdown emoji markup when it makes sense.
 Mention only one date of publication for the whole blog. Text context information is bellow:
 {text}
 """
