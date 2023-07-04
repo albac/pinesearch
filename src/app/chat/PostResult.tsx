@@ -30,16 +30,16 @@ export default function PostResult({ source, text }: IPostResultProps) {
 
   return (
     <Link
-      className="w-5/6 mb-4 px-8 py-2 flex items-center cursor-pointer  hover:shadow-lg"
+      className="w-5/6 mb-4 px-8 py-4 sm:flex items-center cursor-pointer hover:shadow-lg"
       href={`/blog/${formattedSource}`}
     >
       <div className="h-24 w-24 relative">
         {image && <Image src={image} fill={true} alt="post" />}
       </div>
 
-      <div className="flex flex-col h-full ml-8 w-3/4">
+      <div className="flex flex-col h-full sm:ml-8 sm:w-3/4 overflow-hidden">
         <h1 className="font-bold text-left">{formattedSource}</h1>
-        <p className="text-left text-sm text-ellipsis">{text}</p>
+        <p className="text-start sm:text-left text-sm text-ellipsis">{text}</p>
       </div>
     </Link>
   );
