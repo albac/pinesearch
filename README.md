@@ -1,6 +1,6 @@
 # PineSearch
 
-Pinesearch was developed for the (Pinecone hackathon)[https://devpost.com/software/pinesearch], came up as an idea to utilize pinecone database to speed up the creation of blogs and do a semantic search based on those blogs.
+Pinesearch was developed for the [Pinecone hackathon](https://devpost.com/software/pinesearch), came up as an idea to utilize pinecone database to speed up the creation of blogs and do a semantic search based on those blogs.
 
 ## Inspiration
 
