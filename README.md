@@ -1,34 +1,63 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# PineSearch
 
-## Getting Started
+Pinesearch was developed for the (Pinecone hackathon)[https://devpost.com/software/pinesearch], came up as an idea to utilize pinecone database to speed up the creation of blogs and do a semantic search based on those blogs.
 
-First, run the development server:
+## Inspiration
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+Every day, numerous interesting and valuable documents are uploaded to the internet, including technical papers, studies, business guides, lectures, and research findings. However, these documents are not easily accessible or readable for the general public. Language models that could process and understand them take a long time to be trained and released.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The creators of these documents are experts in their fields but may lack technical skills or online presence, making it difficult for them to share their work and gain recognition. As a result, valuable knowledge remains hidden and underutilized. Users also struggle to find up-to-date and relevant scientific and professional information due to the lack of an easy search method.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+In order to bridge this gap, we need a solution that makes these documents more accessible, readable, and discoverable for both users and creators, ensuring valuable knowledge doesn't go unnoticed and that experts receive recognition for their work in a timely manner.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## What it does
 
-## Learn More
+Our project aims to provide easy access to the **latest research** and **most interesting articles** that are being released on the internet, as large PDF documents, creating a short content blog post that is easy to read and providing the original source as a reference.
 
-To learn more about Next.js, take a look at the following resources:
+This generated content will be provided to **ChatGPT**, leveraging its **intelligence power** to make the latest research accessible to the general public in an easy way.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Additionally, it will promote the **social connection** between authors and those who are interested in their material.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The application will be an online website that allows users to interact with these documents. It will have a **search capability** that can find any type of document according to the user's request.
 
-## Deploy on Vercel
+Instead of providing the original PDF, the application will generate easy-to-read, **one-page blog posts**. This approach encourages people to read the content.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The application will have a social interface that promotes sharing, liking, commenting, and provides statistics on the documents.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+There will also be the ability to chat and perform semantic searches within the documents.
+
+The purpose of the application is to connect people with shared interests in valuable educational and business topics.
+
+A link to the original PDF will also be provided, making it accessible for users who want to explore the source document further.
+
+## How we built it
+
+Using **Pinecone**, **Langchain**, and **ChatGPT**, we create a service that collects these types of documents and generates easy-to-read content in Markdown format. This will be a background service that runs on a schedule.
+
+The collected files will be converted into one-page Markdown blogs and indexed by Pinecone instead of using the original PDFs. This approach significantly speeds up access to the knowledge requested by users.
+
+Most of the backend is hosted on **AWS** using **Amplify**.
+
+The interface will be built using **Next.js from Vercel** and will provide the ability for users to log in with social providers.
+
+The Pinecone API will provide metadata for quick document searches, enabling real-time presentation of search results.
+
+ChatGPT, using Langchain, will search the Pinecone index to provide answers related to the documents listed in the user's request.
+
+Next.js will render the Markdown content, transforming it into visually appealing blogs using Tailwind Prose.
+
+## Challenges we ran into
+
+We encountered challenges with installing Langchain and other dependencies in Lambda. Additionally, we faced limitations in terms of space and time. To address these issues, we had to create a container that would resolve the space and library requirements.
+
+## Accomplishments that we're proud of
+
+One of our objectives was to keep the costs low since initial access for all users would be free. However, we also aimed to offer a subscription option that would allow us to utilize better and more expensive resources.
+
+## What we learned
+
+We learned how to use Pinecone to create summaries for blogs. Furthermore, we discovered how easily we can integrate Hugging Face to generate new and interesting features, such as images and audio for the blogs. Implementing Zapier and Clerk proved to be straightforward as well.
+
+## What's next for PineSearch
+
+Our next steps involve making PineSearch accessible to everyone and transforming it into a final product.
