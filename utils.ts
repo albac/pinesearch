@@ -4,6 +4,15 @@ import { OpenAI } from "langchain/llms/openai";
 import { loadQAStuffChain } from "langchain/chains";
 import { Document } from "langchain/document";
 import { timeout, indexName } from "./pinecone-config";
+import { Storage, Amplify } from "aws-amplify";
+// Amplify.Logger.LOG_LEVEL = "DEBUG";
+import awsconfig from "@/aws-exports";
+
+Amplify.configure({ ...awsconfig, ssr: true });
+
+import { Credentials } from "@aws-amplify/core";
+import * as S3 from "aws-sdk/clients/s3";
+import { S3Customizations } from "aws-sdk/lib/services/s3";
 
 export const createPineconeIndex = async (client: any, vectorDimension: any) => {
   // Initiate index existence check
@@ -51,8 +60,6 @@ export const updatePinecone = async (client: any, docs: any) => {
 
     console.log(`Text split into ${chunks.length} chunks`);
 
-    console.log(`openai key: ${process.env.OPENAI_API_KEY}`);
-
     // create openAI embeddings for documents
     const embeddingsArrays = await new OpenAIEmbeddings({
       openAIApiKey: process.env.OPENAI_API_KEY
@@ -95,40 +102,57 @@ export const updatePinecone = async (client: any, docs: any) => {
 };
 
 export const queryPineconeVectorStoreAndQueryLLM = async (client: any, question: any) => {
-  console.log("Consultando el vector store de Pinecone...");
-  console.log(question);
+  try {
+    const credentials = await Credentials.get();
+    const s3 = new S3({
+      apiVersion: "2006-03-01",
+      params: { Bucket: awsconfig.aws_user_files_s3_bucket },
+      signatureVersion: "v4",
+      region: awsconfig.aws_user_files_s3_bucket_region,
+      credentials
+    });
+
+    const params = {
+      Bucket: awsconfig.aws_user_files_s3_bucket,
+      Key: "public/mdx/youneedpdf_20230719021635.md"
+    };
+
+    const metaData = await s3.headObject(params).promise();
+
+    console.log("File Properties ", metaData);
+  } catch (error) {
+    console.log("Error ", error);
+  }
+
+  console.log(`This is the QUESTION!!: ${question}`);
   // Obtener el índice
   const index = client.Index(indexName);
-  console.log("0");
 
-  console.log(`Clave de OpenAI: ${process.env.OPENAI_API_KEY}`);
   // Crear un embedding para la consulta
   const queryEmbedding = await new OpenAIEmbeddings({
     openAIApiKey: process.env.OPENAI_API_KEY
   }).embedQuery(question);
-  console.log("1");
   // Consultar a Pinecone
   const queryResponse = await index.query({
     queryRequest: {
-      topK: 10,
+      topK: 3,
       vector: queryEmbedding,
       includeMetadata: true,
       includeValues: true
     }
   });
-  console.log("2");
   const matchesFound = queryResponse.matches.length;
   const matches = queryResponse.matches;
+  console.log(matches);
   const matchedDocsMetadata = matches.map((match: any) => match.metadata);
   console.log(`matchedDocsMetadata ${matchedDocsMetadata} matches...`);
   console.dir(matchedDocsMetadata[0]);
   console.log(`Se encontraron ${matchesFound} coincidencias...`);
 
-  console.log(`Clave de OpenAI: ${process.env.OPENAI_API_KEY}`);
-
   if (matchesFound) {
     const llm = new OpenAI({
-      openAIApiKey: process.env.OPENAI_API_KEY,temperature: 0
+      openAIApiKey: process.env.OPENAI_API_KEY,
+      temperature: 0
     });
     const chain = loadQAStuffChain(llm);
 
@@ -144,13 +168,12 @@ export const queryPineconeVectorStoreAndQueryLLM = async (client: any, question:
 
     return {
       resultString: result.text,
-      resultArray: matchedDocsMetadata,
+      resultArray: matchedDocsMetadata
     };
   }
 
   return {
     resultString: null,
-    resultArray: [],
+    resultArray: []
   };
 };
-

@@ -27,7 +27,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 class BlogGenerator:
     def __init__(self, pdf_url, prompt_template, prompt_template_combined, prompt_template_summary, pinecone_index, bucket_name):
         self.pdf_url = pdf_url
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")  # Obtener el timestamp actual
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         no_url = self.pdf_url.split("/")[-1]
         filestring = ''.join(e for e in no_url if e.isalnum())
         self.filename = filestring[-10:] + "_" + timestamp
@@ -191,7 +191,7 @@ class BlogGenerator:
         if total_blog_count < 1500:
             logger.info("Not enough for a markdown")
             response['status'] = "failed"
-            response['message'] = "Not enough for a markdown"
+            response['message'] = f"Content size:{str(total_blog_count)}, Not enough for a markdown"
         else:
             f = open(filelocation, "w")
             f.write(summary["output_text"])
@@ -250,6 +250,7 @@ class BlogGenerator:
             response['message'] = f"An error |1s PART| occurred: {str(e)}"
             response['status'] = 'failed'
             logger.info(response['message'])
+            return response
 
         try:
             openai = OpenAI(model_name="gpt-3.5-turbo-16k", temperature=0)
