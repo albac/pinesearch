@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:latest
+FROM public.ecr.aws/lambda/python:3.10
 
 ENV PINECONE_API_KEY XXX
 ENV PINECONE_ENVIRONMENT us-west4-gcp-free

@@ -1,4 +1,2 @@
-
-
-export const indexName = 'pine-search-index'
-export const timeout = 80000
+export const indexName = "answers1";
+export const timeout = 80000;

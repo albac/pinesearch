@@ -4,7 +4,7 @@ import { Amplify } from "aws-amplify";
 import "./globals.css";
 import Navbar from "./Navbar";
 
-Amplify.configure(awsconfig);
+Amplify.configure({ ...awsconfig, ssr: true });
 
 export const metadata = {
   title: "PineSearch",

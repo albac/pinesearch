@@ -74,7 +74,8 @@ class PineconeIndexer:
         self.generate_embeddings(docs)
         self.clean_up(temp_dir)
 
+
 # Usage
-indexer = PineconeIndexer('pineblogs101145-dev', 'public/mdx/', 'pine-search-index')
+indexer = PineconeIndexer('pineblogs101145-dev', 'public/mdx/', 'answers1')
 indexer.run()
 

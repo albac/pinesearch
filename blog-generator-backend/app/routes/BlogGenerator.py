@@ -124,7 +124,7 @@ class BlogGenerator:
         index = pinecone.Index(self.pinecone_index)
 
     def create_pinecone_vector(self, pages):
-        embeddings = OpenAIEmbeddings(model="gpt-3.5-turbo-16k")
+        embeddings = OpenAIEmbeddings()
         vectordb = Pinecone.from_documents(pages, embeddings, index_name=self.pinecone_index)
 
         logger.info("Pinecone vector created!")
@@ -132,7 +132,7 @@ class BlogGenerator:
         return vectordb
 
     def create_pinecone_vector_extra(self, texts):
-        embeddings = OpenAIEmbeddings(model="gpt-3.5-turbo-16k")
+        embeddings = OpenAIEmbeddings()
         vectordb = Pinecone.from_texts([t.page_content for t in texts], embeddings, index_name=self.pinecone_index)
 
         logger.info("Pinecone vector created!")
@@ -189,7 +189,7 @@ class BlogGenerator:
         if total_blog_count < 1500:
             logger.info("Not enough for a markdown")
             response['status'] = "failed"
-            response['message'] = "Not enough for a markdown"
+            response['message'] = f"Count size: {total_blog_count}, Not enough for a markdown"
         else:
             f = open(filelocation, "w")
             f.write(summary["output_text"])
@@ -248,7 +248,7 @@ class BlogGenerator:
             response['message'] = f"An error |1s PART| occurred: {str(e)}"
             response['status'] = 'failed'
             logger.info(response['message'])
-
+            return response
 
         try:
             openai = OpenAI(model_name="gpt-3.5-turbo-16k", temperature=0)
