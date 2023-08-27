@@ -27,9 +27,11 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
   const [query, setQuery] = useState("");
   const [queries, setQueries] = useState<Array<string>>([]);
   const [resultString, setResultString] = useState<string | null>(null);
-  const [resultArray, setResultArray] = useState<Array<{ source: string; text: string }> | null>(
-    null
-  );
+  const [resultArray, setResultArray] = useState<Array<{
+    source: string;
+    text: string;
+    title: string;
+  }> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   /*
@@ -39,15 +41,18 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
     */
 
   const updateSearchState = (
-    result: { resultString: string; resultArray: Array<{ source: string; text: string }> },
+    result: {
+      resultString: string;
+      resultArray: Array<{ source: string; text: string; title: string }>;
+    },
     currentQuery: string
   ) => {
     const { resultString, resultArray } = result;
 
-    console.log("Result type: ", typeof result);
-    console.log("Result: ", result);
-    console.log("Result String: ", resultString);
-    console.log("Result Array: ", resultArray);
+    // console.log("Result type: ", typeof result);
+    // console.log("Result: ", result);
+    // console.log("Result String: ", resultString);
+    // console.log("Result Array: ", resultArray);
 
     if (resultString) {
       setResultString(resultString);
