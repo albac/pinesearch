@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 interface ISearchResultProps {
   queries: Array<string>;
   resultString: string | null;
-  resultArray: Array<{ source: string; text: string }> | null;
+  resultArray: Array<{ source: string; text: string; title: string }> | null;
 }
 
 export default function SearchResult({ queries, resultString, resultArray }: ISearchResultProps) {
@@ -31,7 +31,7 @@ export default function SearchResult({ queries, resultString, resultArray }: ISe
       {/* dummy post results for now */}
       {resultArray &&
         resultArray.map((item, index) => (
-          <PostResult key={index} source={item.source} text={item.text} />
+          <PostResult key={index} source={item.source} text={item.text} title={item.title} />
         ))}
     </>
   );

@@ -4,7 +4,7 @@ import { queryPineconeVectorStoreAndQueryLLM } from "../../../../utils";
 
 export async function POST(req: Request) {
   const body = await req.json();
-  console.log("body: ", body);
+  // console.log("body: ", body);
   const client = new PineconeClient();
 
   await client.init({

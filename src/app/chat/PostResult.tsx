@@ -9,10 +9,10 @@ import { useEffect, useState } from "react";
 interface IPostResultProps {
   source: string;
   text: string;
+  title: string;
 }
 
-export default function PostResult({ source, text }: IPostResultProps) {
-  // Remueve la ruta /tmp/tmpymy2bqal/ del source
+export default function PostResult({ source, text, title }: IPostResultProps) {
   const formattedSource = source.split("/")[3].split(".")[0];
 
   const [image, setImage] = useState("");
@@ -38,7 +38,7 @@ export default function PostResult({ source, text }: IPostResultProps) {
       </div>
 
       <div className="flex flex-col h-full sm:ml-8 sm:w-3/4 overflow-hidden">
-        <h1 className="font-bold text-left">{formattedSource}</h1>
+        <h1 className="font-bold text-left">{title}</h1>
         <p className="text-start sm:text-left text-sm text-ellipsis">{text}</p>
       </div>
     </Link>

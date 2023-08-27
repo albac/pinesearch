@@ -1,5 +1,6 @@
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { BufferWindowMemory } from "langchain/memory";
 import { OpenAI } from "langchain/llms/openai";
 import { loadQAStuffChain } from "langchain/chains";
 import { Document } from "langchain/document";
@@ -11,19 +12,21 @@ import awsconfig from "@/aws-exports";
 Amplify.configure({ ...awsconfig, ssr: true });
 
 import { Credentials } from "@aws-amplify/core";
-import * as S3 from "aws-sdk/clients/s3";
+
+import S3 from "aws-sdk/clients/s3";
+
 import { S3Customizations } from "aws-sdk/lib/services/s3";
 
 export const createPineconeIndex = async (client: any, vectorDimension: any) => {
   // Initiate index existence check
-  console.log(`Checking ${indexName}...`);
+  //console.log(`Checking ${indexName}...`);
 
   // Get existing indexes
   const existingIndexes = await client.listIndexes();
 
   // if index doesn't exist create it
   if (!existingIndexes.includes(indexName)) {
-    console.log(`Creating ${indexName}...`);
+    //console.log(`Creating ${indexName}...`);
 
     await client.createIndex({
       createRequest: {
@@ -36,7 +39,7 @@ export const createPineconeIndex = async (client: any, vectorDimension: any) => 
     // wait for initialization, using a dummy timeout method
     await new Promise((resolve) => setTimeout(resolve, timeout));
   } else {
-    console.log(`${indexName} already exists`);
+    //console.log(`${indexName} already exists`);
   }
 };
 
@@ -46,7 +49,7 @@ export const updatePinecone = async (client: any, docs: any) => {
 
   // process all docs to be added to the index
   for (const doc of docs) {
-    console.log(`Processing document: ${doc.metadata.source}`);
+    //console.log(`Processing document: ${doc.metadata.source}`);
 
     const txtPath = doc.metadata.source;
     const text = doc.pageContent;
@@ -58,7 +61,7 @@ export const updatePinecone = async (client: any, docs: any) => {
     // split text into chunks
     const chunks = await textSplitter.createDocuments([text]);
 
-    console.log(`Text split into ${chunks.length} chunks`);
+    //console.log(`Text split into ${chunks.length} chunks`);
 
     // create openAI embeddings for documents
     const embeddingsArrays = await new OpenAIEmbeddings({
@@ -102,69 +105,98 @@ export const updatePinecone = async (client: any, docs: any) => {
 };
 
 export const queryPineconeVectorStoreAndQueryLLM = async (client: any, question: any) => {
-  try {
+  const extractS3KeyFromSource = (source: string) => {
+    const fileName = source.split("/").pop();
+    return `public/mdx/${fileName}`;
+  };
+
+  const fetchTituloFromS3 = async (s3Key: string) => {
     const credentials = await Credentials.get();
     const s3 = new S3({
       apiVersion: "2006-03-01",
       params: { Bucket: awsconfig.aws_user_files_s3_bucket },
       signatureVersion: "v4",
       region: awsconfig.aws_user_files_s3_bucket_region,
-      credentials
+      credentials: credentials
     });
 
     const params = {
       Bucket: awsconfig.aws_user_files_s3_bucket,
-      Key: "public/mdx/youneedpdf_20230719021635.md"
+      Key: s3Key
     };
 
-    const metaData = await s3.headObject(params).promise();
+    try {
+      const metaData = await s3.headObject(params).promise();
+      return metaData.Metadata?.titulo || null;
+    } catch (error) {
+      console.log("Error fetching metadata for", s3Key, error);
+      return null;
+    }
+  };
 
-    console.log("File Properties ", metaData);
-  } catch (error) {
-    console.log("Error ", error);
-  }
+  //console.log(`This is the QUESTION!!: ${question}`);
 
-  console.log(`This is the QUESTION!!: ${question}`);
-  // Obtener el índice
   const index = client.Index(indexName);
 
-  // Crear un embedding para la consulta
+  // Creating an embedding for the query
   const queryEmbedding = await new OpenAIEmbeddings({
     openAIApiKey: process.env.OPENAI_API_KEY
   }).embedQuery(question);
-  // Consultar a Pinecone
+  // Query Pinecone
   const queryResponse = await index.query({
     queryRequest: {
-      topK: 3,
+      topK: 5,
       vector: queryEmbedding,
       includeMetadata: true,
       includeValues: true
     }
   });
   const matchesFound = queryResponse.matches.length;
+
   const matches = queryResponse.matches;
-  console.log(matches);
+  // console.log(matches);
   const matchedDocsMetadata = matches.map((match: any) => match.metadata);
-  console.log(`matchedDocsMetadata ${matchedDocsMetadata} matches...`);
-  console.dir(matchedDocsMetadata[0]);
-  console.log(`Se encontraron ${matchesFound} coincidencias...`);
+
+  // Update each matched document with titulo from S3
+  for (const doc of matchedDocsMetadata) {
+    const s3Key = extractS3KeyFromSource(doc.source);
+    const titulo = await fetchTituloFromS3(s3Key);
+    if (titulo) {
+      doc.title = titulo;
+    }
+  }
+
+  // console.dir(matchedDocsMetadata[0]);
+
+  // console.log(`Total ${matchesFound} matches found...`);
+
+  const memory = new BufferWindowMemory({ k: 3 });
+  // const model = "gpt-4"
+  const { OpenAI } = require("langchain/llms/openai");
 
   if (matchesFound) {
     const llm = new OpenAI({
+      //modelName: model,
       openAIApiKey: process.env.OPENAI_API_KEY,
-      temperature: 0
+      temperature: 0,
+      maxTokens: 200,
+      memory: memory
     });
     const chain = loadQAStuffChain(llm);
 
-    // Extraer y concatenar el contenido de las páginas de los documentos coincidentes
+    // Extract the content of the matches
     const concatenatedPageContent = queryResponse.matches
-      .map((match: any) => match.metadata.pageContent)
+      .map((match: any) => match.metadata.text)
       .join(" ");
+
+    // console.log(`Concatenated: ${concatenatedPageContent}`);
 
     const result = await chain.call({
       input_documents: [new Document({ pageContent: concatenatedPageContent })],
       question
     });
+
+    // console.log(`Result: ${result}`);
 
     return {
       resultString: result.text,
