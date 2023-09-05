@@ -1,5 +1,9 @@
-import { SignIn } from "@clerk/nextjs";
+import ViewAuth from "@/components/ViewAuth";
 
 export default function page() {
-  return <SignIn />;
+  return (
+    <ViewAuth>
+      <></>
+    </ViewAuth>
+  );
 }

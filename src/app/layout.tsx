@@ -1,8 +1,8 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import awsconfig from "../aws-exports";
 import { Amplify } from "aws-amplify";
 import "./globals.css";
 import Navbar from "./Navbar";
+import AuthenticatorProvider from "@/components/AuthenticatorProvider";
 
 Amplify.configure({ ...awsconfig, ssr: true });
 
@@ -14,12 +14,12 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <ClerkProvider>
-        <body className="font-inter">
+      <body className="font-inter">
+        <AuthenticatorProvider>
           <Navbar />
           {children}
-        </body>
-      </ClerkProvider>
+        </AuthenticatorProvider>
+      </body>
     </html>
   );
 }

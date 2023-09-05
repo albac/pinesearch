@@ -1,20 +1,28 @@
 "use client";
 
+import { useAuthenticator } from "@aws-amplify/ui-react";
 import { useState, useEffect } from "react";
 
-export default function AudioBtn({ voice }: { voice: any }) {
-  const [audioElement] = useState(new Audio(voice));
+export default function AudioButton({ voice }: { voice: string }) {
+  const { authStatus } = useAuthenticator((context) => [context.user]);
+  const isNotAuth = authStatus && authStatus !== "authenticated";
+
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
 
   const playAudio = () => {
-    audioElement.play();
-    setIsPlaying(true);
+    if (audioElement) {
+      audioElement.play();
+      setIsPlaying(true);
+    }
   };
 
   const pauseAudio = () => {
-    audioElement.pause();
-    setIsPlaying(false);
+    if (audioElement) {
+      audioElement.pause();
+      setIsPlaying(false);
+    }
   };
 
   const handleAudioEnd = () => {
@@ -23,13 +31,17 @@ export default function AudioBtn({ voice }: { voice: any }) {
   };
 
   useEffect(() => {
-    audioElement.addEventListener("ended", handleAudioEnd);
+    if (typeof window !== "undefined") {
+      const audio = new Audio(voice);
+      setAudioElement(audio);
+      audio.addEventListener("ended", handleAudioEnd);
 
-    return () => {
-      pauseAudio();
-      audioElement.removeEventListener("ended", handleAudioEnd);
-    };
-  }, [audioElement]);
+      return () => {
+        pauseAudio();
+        audio.removeEventListener("ended", handleAudioEnd);
+      };
+    }
+  }, [voice]);
 
   useEffect(() => {
     if (isEnded) {
@@ -38,19 +50,21 @@ export default function AudioBtn({ voice }: { voice: any }) {
   }, [isEnded]);
 
   return (
-    <div>
-      {isPlaying ? (
-        <Button onClick={pauseAudio}>Stop Audio</Button>
-      ) : (
-        <>
-          {isEnded ? (
-            <Button onClick={playAudio}>Replay Audio</Button>
-          ) : (
-            <Button onClick={playAudio}>Play Audio</Button>
-          )}
-        </>
-      )}
-    </div>
+    !isNotAuth && (
+      <div>
+        {isPlaying ? (
+          <Button onClick={pauseAudio}>Stop Audio</Button>
+        ) : (
+          <>
+            {isEnded ? (
+              <Button onClick={playAudio}>Replay Audio</Button>
+            ) : (
+              <Button onClick={playAudio}>Play Audio</Button>
+            )}
+          </>
+        )}
+      </div>
+    )
   );
 }
 

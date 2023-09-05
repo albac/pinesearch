@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export default async function handler(event: any) {
   const discordEventId = process.env.ZAPER_ACTION_DISCORD_ID ?? "";
 
