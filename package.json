@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "doppler run -- next dev",
+    "build": "doppler run -- next build",
     "start": "next start",
     "lint": "next lint"
   },
