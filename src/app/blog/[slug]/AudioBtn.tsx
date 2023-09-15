@@ -9,23 +9,19 @@ export default function AudioButton({ voice }: { voice: string }) {
   return isAuth ? <GenerateAudio voice={voice} /> : <div></div>;
 }
 
-const GenerateAudio = ({ voice }: { voice: string }) => {
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
+function GenerateAudio({ voice }: { voice: any }) {
+  const [audioElement] = useState(new Audio(voice));
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
 
   const playAudio = () => {
-    if (audioElement) {
-      audioElement.play();
-      setIsPlaying(true);
-    }
+    audioElement.play();
+    setIsPlaying(true);
   };
 
   const pauseAudio = () => {
-    if (audioElement) {
-      audioElement.pause();
-      setIsPlaying(false);
-    }
+    audioElement.pause();
+    setIsPlaying(false);
   };
 
   const handleAudioEnd = () => {
@@ -34,17 +30,13 @@ const GenerateAudio = ({ voice }: { voice: string }) => {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const audio = new Audio(voice);
-      setAudioElement(audio);
-      audio.addEventListener("ended", handleAudioEnd);
+    audioElement.addEventListener("ended", handleAudioEnd);
 
-      return () => {
-        pauseAudio();
-        audio.removeEventListener("ended", handleAudioEnd);
-      };
-    }
-  }, [voice]);
+    return () => {
+      pauseAudio();
+      audioElement.removeEventListener("ended", handleAudioEnd);
+    };
+  }, [audioElement]);
 
   useEffect(() => {
     if (isEnded) {
@@ -67,7 +59,7 @@ const GenerateAudio = ({ voice }: { voice: string }) => {
       )}
     </div>
   );
-};
+}
 
 const Button = ({ onClick, children }: { onClick: any; children: any }) => {
   return (
