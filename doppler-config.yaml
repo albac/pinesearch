@@ -1,6 +1,6 @@
 scoped:
   project: pinesearch-app
-  environment: dev
+  config: dev
 version-check: {}
 analytics:
   disable: false
