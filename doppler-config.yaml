@@ -1,0 +1,10 @@
+scoped:
+  project: pinesearch-app
+  environment: dev
+version-check: {}
+analytics:
+  disable: false
+tui:
+  introVersionSeen: 0
+secrets:
+  DOPPLER_TOKEN: dp.ct.NiL2tYKC7cSXyjz9jL4uyveQm8jzcH9aohO0GR5Y61u
