@@ -3,7 +3,7 @@ import { SortDirection, Storage, withSSRContext } from "aws-amplify";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Image from "next/image";
 import AudioBtn from "./AudioBtn";
-import { currentUser } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/useAuth";
 
 interface StaticParams {
   slug: string;
@@ -52,8 +52,6 @@ export async function generateMetadata({ params }: BlogPageParams) {
 export const revalidate: number = 30;
 
 export default async function blogPage({ params }: BlogPageParams) {
-  const user = await currentUser();
-
   const [mdxFile, imageUrl, audio_src] = await Promise.allSettled([
     Storage.get(`mdx/${params.slug}.md`, { level: "public" }),
     Storage.get(`${params.slug}.webp`, { level: "public" }),
@@ -79,7 +77,9 @@ export default async function blogPage({ params }: BlogPageParams) {
             src={imageSrc}
             alt={`ia-image by ${params.slug}`}
           />
-          {user?.id ? <AudioBtn voice={voice} /> : <div></div>}
+
+          <AudioBtn voice={voice} />
+
           <article
             className="
           max-w-none

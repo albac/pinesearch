@@ -4,19 +4,19 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-export { default as SearchResult } from "./SearchResult";
-export { default as NavBar } from "./NavBar";
-export { default as FilterTime } from "./FilterTime";
-export { default as Comments } from "./Comments";
-export { default as Tag } from "./Tag";
-export { default as ShareRequirement } from "./ShareRequirement";
-export { default as NavbarResults } from "./NavbarResults";
 export { default as AIChat } from "./AIChat";
-export { default as SearchPopup } from "./SearchPopup";
-export { default as SearchresultBig } from "./SearchresultBig";
-export { default as UserChat } from "./UserChat";
-export { default as SearchBar } from "./SearchBar";
-export { default as SearchResults } from "./SearchResults";
-export { default as studioTheme } from "./studioTheme";
-export { default as PostUpdateForm } from "./PostUpdateForm";
+export { default as Comments } from "./Comments";
+export { default as FilterTime } from "./FilterTime";
+export { default as NavBar } from "./NavBar";
+export { default as NavbarResults } from "./NavbarResults";
 export { default as PostCreateForm } from "./PostCreateForm";
+export { default as PostUpdateForm } from "./PostUpdateForm";
+export { default as SearchBar } from "./SearchBar";
+export { default as SearchPopup } from "./SearchPopup";
+export { default as SearchResult } from "./SearchResult";
+export { default as SearchResults } from "./SearchResults";
+export { default as SearchresultBig } from "./SearchresultBig";
+export { default as ShareRequirement } from "./ShareRequirement";
+export { default as Tag } from "./Tag";
+export { default as UserChat } from "./UserChat";
+export { default as studioTheme } from "./studioTheme";

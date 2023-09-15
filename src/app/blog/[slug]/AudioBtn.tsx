@@ -1,8 +1,15 @@
 "use client";
 
+import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
 
-export default function AudioBtn({ voice }: { voice: any }) {
+export default function AudioButton({ voice }: { voice: string }) {
+  const { isAuth } = useAuth();
+
+  return isAuth ? <GenerateAudio voice={voice} /> : <div></div>;
+}
+
+function GenerateAudio({ voice }: { voice: any }) {
   const [audioElement] = useState(new Audio(voice));
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEnded, setIsEnded] = useState(false);

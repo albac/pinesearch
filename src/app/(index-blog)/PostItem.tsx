@@ -1,8 +1,8 @@
-import Tag from "@/components/Tag";
 import { formateDate } from "@/helpers";
 import { Storage } from "aws-amplify";
 import Image from "next/image";
 import Link from "next/link";
+import Tag from "../chat/Tag";
 
 export default async function PostItem({ post }: { post: any }) {
   const { title, summary, createdAt, s3url } = post;
