@@ -7,4 +7,4 @@ analytics:
 tui:
   introVersionSeen: 0
 secrets:
-  DOPPLER_TOKEN: dp.ct.NiL2tYKC7cSXyjz9jL4uyveQm8jzcH9aohO0GR5Y61u
+  DOPPLER_TOKEN: $DOPPLER_TOKEN
