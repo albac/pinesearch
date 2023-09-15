@@ -4,15 +4,12 @@ import "./globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import AuthenticatorProvider from "@/components/AuthenticatorProvider";
 
-if (process.env.USER_BRANCH === "prod") {
-  awsconfig.oauth.redirectSignIn = "https://albac.dev/";
-  awsconfig.oauth.redirectSignOut = "https://albac.dev/";
-} else if (process.env.USER_BRANCH === "stage") {
-  awsconfig.oauth.redirectSignIn = "https://beta.albac.dev/";
-  awsconfig.oauth.redirectSignOut = "https://beta.albac.dev/";
-} else {
+if (process.env.USER_BRANCH === "dev") {
   awsconfig.oauth.redirectSignIn = "http://localhost:3000/";
   awsconfig.oauth.redirectSignOut = "http://localhost:3000/";
+} else {
+  awsconfig.oauth.redirectSignIn = "https://www.pinesearch.io/";
+  awsconfig.oauth.redirectSignOut = "https://www.pinesearch.io/";
 }
 
 Amplify.configure({ ...awsconfig, ssr: true });
