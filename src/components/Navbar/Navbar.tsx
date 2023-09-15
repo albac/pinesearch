@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import AuthButtons from "@/components/AuthButtons";
+import AuthButtons from "./AuthButtons";
 
 export default async function Navbar() {
   return (

@@ -1,14 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useAuthenticator } from "@aws-amplify/ui-react";
-import { Auth } from "aws-amplify";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AuthButtons() {
-  const { authStatus } = useAuthenticator((context) => [context.authStatus]);
-  const isNotAuth = authStatus && authStatus !== "authenticated";
-
-  return <>{isNotAuth ? <SignInButton /> : <SignOutButton />}</>;
+  const { isAuth } = useAuth();
+  return isAuth ? <SignOutButton /> : <SignInButton />;
 }
 
 function SignInButton() {
@@ -22,9 +19,10 @@ function SignInButton() {
 }
 
 function SignOutButton() {
+  const { onLogout } = useAuth();
   return (
     <div
-      onClick={() => Auth.signOut()}
+      onClick={onLogout}
       className="mt-2 rounded-full bg-fig-primary px-5 py-2 text-white sm:mt-0 font-medium"
     >
       <button>Logout</button>

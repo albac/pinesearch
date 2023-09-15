@@ -3,6 +3,7 @@ import { SortDirection, Storage, withSSRContext } from "aws-amplify";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Image from "next/image";
 import AudioBtn from "./AudioBtn";
+import { useAuth } from "@/hooks/useAuth";
 
 interface StaticParams {
   slug: string;
@@ -77,7 +78,7 @@ export default async function blogPage({ params }: BlogPageParams) {
             alt={`ia-image by ${params.slug}`}
           />
 
-          {!!voice && <AudioBtn voice={voice} />}
+          <AudioBtn voice={voice} />
 
           <article
             className="

@@ -1,12 +1,15 @@
 "use client";
 
-import { useAuthenticator } from "@aws-amplify/ui-react";
+import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
 
 export default function AudioButton({ voice }: { voice: string }) {
-  const { authStatus } = useAuthenticator((context) => [context.user]);
-  const isNotAuth = authStatus && authStatus !== "authenticated";
+  const { isAuth } = useAuth();
 
+  return isAuth ? <GenerateAudio voice={voice} /> : <div></div>;
+}
+
+const GenerateAudio = ({ voice }: { voice: string }) => {
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
@@ -50,23 +53,21 @@ export default function AudioButton({ voice }: { voice: string }) {
   }, [isEnded]);
 
   return (
-    !isNotAuth && (
-      <div>
-        {isPlaying ? (
-          <Button onClick={pauseAudio}>Stop Audio</Button>
-        ) : (
-          <>
-            {isEnded ? (
-              <Button onClick={playAudio}>Replay Audio</Button>
-            ) : (
-              <Button onClick={playAudio}>Play Audio</Button>
-            )}
-          </>
-        )}
-      </div>
-    )
+    <div>
+      {isPlaying ? (
+        <Button onClick={pauseAudio}>Stop Audio</Button>
+      ) : (
+        <>
+          {isEnded ? (
+            <Button onClick={playAudio}>Replay Audio</Button>
+          ) : (
+            <Button onClick={playAudio}>Play Audio</Button>
+          )}
+        </>
+      )}
+    </div>
   );
-}
+};
 
 const Button = ({ onClick, children }: { onClick: any; children: any }) => {
   return (

@@ -1,8 +1,8 @@
 "use client";
 
-import Tag from "@/components/Tag";
 import { useRouter } from "next/navigation";
 import MagnifyingGlassIcon from "../../../public/icons/MagnifyingGlassIcon";
+import Tag from "./Tag";
 
 interface IProps {
   openModal: () => void;

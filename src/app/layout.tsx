@@ -1,7 +1,7 @@
 import awsconfig from "../aws-exports";
 import { Amplify } from "aws-amplify";
 import "./globals.css";
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar/Navbar";
 import AuthenticatorProvider from "@/components/AuthenticatorProvider";
 
 if (process.env.USER_BRANCH === "prod") {
