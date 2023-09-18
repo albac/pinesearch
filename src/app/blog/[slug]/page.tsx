@@ -4,6 +4,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import Image from "next/image";
 import AudioBtn from "./AudioBtn";
 import { useAuth } from "@/hooks/useAuth";
+import { ImageClient } from "@/components/ImageClient";
 
 interface StaticParams {
   slug: string;
@@ -52,29 +53,23 @@ export async function generateMetadata({ params }: BlogPageParams) {
 export const revalidate: number = 30;
 
 export default async function blogPage({ params }: BlogPageParams) {
-  const [mdxFile, imageUrl, audio_src] = await Promise.allSettled([
+  const [mdxFile, audio_src] = await Promise.allSettled([
     Storage.get(`mdx/${params.slug}.md`, { level: "public" }),
-    Storage.get(`${params.slug}.webp`, { level: "public" }),
     Storage.get(`${params.slug}.wav`, { level: "public" })
   ]);
 
-  if (
-    imageUrl.status === "fulfilled" &&
-    audio_src.status === "fulfilled" &&
-    mdxFile.status === "fulfilled"
-  ) {
-    const imageSrc = imageUrl.value;
+  if (audio_src.status === "fulfilled" && mdxFile.status === "fulfilled") {
     const voice = audio_src.value;
     const mdxSource = await (await fetch(mdxFile.value)).text();
 
     return (
       <div className="py-4">
         <section className="w-[90%] max-w-[806px] mx-auto">
-          <Image
+          <ImageClient
             className="w-full object-fills object-center h-[300px]"
             width={300}
             height={300}
-            src={imageSrc}
+            imageName={params.slug}
             alt={`ia-image by ${params.slug}`}
           />
 
