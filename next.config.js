@@ -6,7 +6,7 @@ const nextConfig = {
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     PINECONE_API_KEY: process.env.PINECONE_API_KEY,
     PINECONE_ENVIRONMENT: process.env.PINECONE_ENVIRONMENT,
-    TEST_DEPLOY: process.env.TEST_DEPLOY
+    NOT_LOCAL: process.env.NOT_LOCAL
   },
   images: {
     formats: ["image/webp"],
