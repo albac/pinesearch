@@ -7,16 +7,16 @@ import Tag from "../chat/Tag";
 export default async function PostItem({ post }: { post: any }) {
   const { title, summary, createdAt, s3url } = post;
 
-  const src = await Storage.get(`${s3url}.webp`, {
-    level: "public"
-  });
+  const [imageUrl] = await Promise.allSettled([Storage.get(`${s3url}.webp`, { level: "public" })]);
 
-  return (
+  const imageSuccess = imageUrl.status === "fulfilled";
+
+  return imageSuccess ? (
     <Link className="block" href={`/blog/${post.s3url}`}>
       <article className="lg:flex items-center gap-5 hover:shadow-md hover:cursor-pointer p-4 transition-colors">
         <Image
           className="rounded-lg w-[180px] h-[180px] block"
-          src={src}
+          src={imageUrl.value}
           width={180}
           height={180}
           alt={`image-created-by-${s3url}`}
@@ -28,5 +28,7 @@ export default async function PostItem({ post }: { post: any }) {
         </div>
       </article>
     </Link>
+  ) : (
+    <div></div>
   );
 }
