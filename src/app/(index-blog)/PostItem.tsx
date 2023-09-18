@@ -1,22 +1,16 @@
 import { formateDate } from "@/helpers";
-import { Storage } from "aws-amplify";
-import Image from "next/image";
 import Link from "next/link";
-import Tag from "../chat/Tag";
+import { ImageClient } from "@/components/ImageClient";
 
 export default async function PostItem({ post }: { post: any }) {
   const { title, summary, createdAt, s3url } = post;
 
-  const [imageUrl] = await Promise.allSettled([Storage.get(`${s3url}.webp`, { level: "public" })]);
-
-  const imageSuccess = imageUrl.status === "fulfilled";
-
-  return imageSuccess ? (
+  return (
     <Link className="block" href={`/blog/${post.s3url}`}>
       <article className="lg:flex items-center gap-5 hover:shadow-md hover:cursor-pointer p-4 transition-colors">
-        <Image
+        <ImageClient
           className="rounded-lg w-[180px] h-[180px] block"
-          src={imageUrl.value}
+          imageName={s3url}
           width={180}
           height={180}
           alt={`image-created-by-${s3url}`}
@@ -28,7 +22,5 @@ export default async function PostItem({ post }: { post: any }) {
         </div>
       </article>
     </Link>
-  ) : (
-    <div></div>
   );
 }
