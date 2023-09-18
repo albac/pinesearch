@@ -4,12 +4,12 @@ import "./globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import AuthenticatorProvider from "@/components/AuthenticatorProvider";
 
-if (process.env.USER_BRANCH === "dev") {
-  awsconfig.oauth.redirectSignIn = "http://localhost:3000/";
-  awsconfig.oauth.redirectSignOut = "http://localhost:3000/";
-} else {
+if (process.env.NOT_LOCAL) {
   awsconfig.oauth.redirectSignIn = "https://www.pinesearch.io/";
   awsconfig.oauth.redirectSignOut = "https://www.pinesearch.io/";
+} else {
+  awsconfig.oauth.redirectSignIn = "http://localhost:3000/";
+  awsconfig.oauth.redirectSignOut = "http://localhost:3000/";
 }
 
 Amplify.configure({ ...awsconfig, ssr: true });
