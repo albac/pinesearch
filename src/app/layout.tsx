@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import AuthenticatorProvider from "@/components/AuthenticatorProvider";
 
-if (process.env.NOT_LOCAL) {
+if (process.env.DOPPLER_ENVIRONMENT === "stg") {
   awsconfig.oauth.redirectSignIn = "https://www.pinesearch.io/";
   awsconfig.oauth.redirectSignOut = "https://www.pinesearch.io/";
 } else {
