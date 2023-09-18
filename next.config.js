@@ -9,6 +9,7 @@ const nextConfig = {
     TEST_DEPLOY: process.env.TEST_DEPLOY
   },
   images: {
+    formats: ["image/webp"],
     remotePatterns: [
       {
         protocol: "https",
