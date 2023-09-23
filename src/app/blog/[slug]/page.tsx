@@ -1,10 +1,8 @@
 import { Post as PostModel } from "@/models";
 import { SortDirection, Storage, withSSRContext } from "aws-amplify";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import Image from "next/image";
-import AudioBtn from "./AudioBtn";
-import { useAuth } from "@/hooks/useAuth";
 import { ImageClient } from "@/components/ImageClient";
+import { Buttons } from "./Buttons";
 
 interface StaticParams {
   slug: string;
@@ -66,14 +64,14 @@ export default async function blogPage({ params }: BlogPageParams) {
       <div className="py-4">
         <section className="w-[90%] max-w-[806px] mx-auto">
           <ImageClient
-            className="w-full object-fills object-center h-[300px]"
+            className="w-full object-fills object-center h-[300px] rounded-md"
             width={300}
             height={300}
             imageName={params.slug}
             alt={`ia-image by ${params.slug}`}
           />
 
-          <AudioBtn voice={voice} />
+          <Buttons voice={voice} />
 
           <article
             className="

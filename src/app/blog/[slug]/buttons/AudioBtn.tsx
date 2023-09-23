@@ -1,15 +1,8 @@
-"use client";
-
-import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
+import { PlayIcon } from "../../../../../public/icons/PlayIcon";
+import { StopIcon } from "../../../../../public/icons/StopIcon";
 
-export default function AudioButton({ voice }: { voice: string }) {
-  const { isAuth } = useAuth();
-
-  return isAuth ? <GenerateAudio voice={voice} /> : <div></div>;
-}
-
-function GenerateAudio({ voice }: { voice: any }) {
+export function AudioButton({ voice }: { voice: string }) {
   const [audioElement] = useState(new Audio(voice));
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
@@ -47,13 +40,21 @@ function GenerateAudio({ voice }: { voice: any }) {
   return (
     <div>
       {isPlaying ? (
-        <Button onClick={pauseAudio}>Stop Audio</Button>
+        <Button onClick={pauseAudio}>
+          <StopIcon />
+          Stop Audio
+        </Button>
       ) : (
         <>
           {isEnded ? (
-            <Button onClick={playAudio}>Replay Audio</Button>
+            <Button onClick={playAudio}>
+              <PlayIcon />
+              Replay Audio
+            </Button>
           ) : (
-            <Button onClick={playAudio}>Play Audio</Button>
+            <Button onClick={playAudio}>
+              <PlayIcon /> Play Audio
+            </Button>
           )}
         </>
       )}
@@ -61,9 +62,12 @@ function GenerateAudio({ voice }: { voice: any }) {
   );
 }
 
-const Button = ({ onClick, children }: { onClick: any; children: any }) => {
+const Button = ({ onClick, children }: { onClick: () => void; children: React.ReactNode }) => {
   return (
-    <button onClick={onClick} className="py-2 px-4 border-2 border-gray-400 text-gray-700 my-5">
+    <button
+      onClick={onClick}
+      className="flex gap-2 text-fig-gray bg-fig-grey-mint p-[10px] rounded-md mt-6 font-medium justify-center items-center hover:scale-110"
+    >
       {children}
     </button>
   );
