@@ -1,19 +1,6 @@
-interface ISearchModalFooterProps {
-  query: string;
-  setQuery: (text: string) => void;
-  onSubmitSearch: () => void;
-}
-
-export default function SearchModalFooter({
-  onSubmitSearch,
-  query,
-  setQuery
-}: ISearchModalFooterProps) {
+export const ChatForm = () => {
   return (
-    <form
-      onSubmit={onSubmitSearch}
-      className="h-16 min-h-[64px] w-full bg-slate-100 flex items-center sticky bottom-0 mt-auto rounded-b-3xl px-4"
-    >
+    <form className="h-16 min-h-[64px] w-full bg-slate-100 flex items-center absolute bottom-0 mt-auto rounded-b-3xl px-4">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -30,9 +17,7 @@ export default function SearchModalFooter({
       <input
         type="text"
         className="h-full ml-2 appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-        placeholder="Ask a question about Science, Law, or Education..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Ask a question about this blog.."
       />
       <button
         type="submit"
@@ -54,4 +39,4 @@ export default function SearchModalFooter({
       </button>
     </form>
   );
-}
+};

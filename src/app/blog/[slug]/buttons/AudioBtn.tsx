@@ -66,7 +66,7 @@ const Button = ({ onClick, children }: { onClick: () => void; children: React.Re
   return (
     <button
       onClick={onClick}
-      className="flex gap-2 text-fig-gray bg-fig-grey-mint p-[10px] rounded-md mt-6 font-medium justify-center items-center hover:scale-110"
+      className="flex gap-2 text-fig-gray mt-2 bg-fig-grey-mint p-[10px] rounded-md font-medium justify-center items-center hover:scale-110"
     >
       {children}
     </button>

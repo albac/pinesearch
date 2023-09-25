@@ -1,25 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { ShareIcon } from "../../../../../public/icons/ShareIcon";
+import { useOpen } from "@/hooks/useOpen";
 
 interface Props {
   slug: string;
 }
 
 export const ShareBtn = ({ slug }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const { isOpen, containerRef, handleClose } = useOpen();
+
   const blogUrl = `https://pinesearch.io/blog/${slug}`;
-
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleAutoCloseMenu = (event: any) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setIsOpen(false);
-    }
-  };
 
   const handleShareFacebook = () => {
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
@@ -33,23 +23,11 @@ export const ShareBtn = ({ slug }: Props) => {
     window.open(twitterShareUrl, "_blank");
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener("click", handleAutoCloseMenu);
-    } else {
-      document.removeEventListener("click", handleAutoCloseMenu);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleAutoCloseMenu);
-    };
-  }, [isOpen]);
-
   return (
-    <div className="relative text-left mt-6" ref={menuRef}>
+    <div className="relative text-left mt-2" ref={containerRef}>
       <div>
         <button
-          onClick={toggleMenu}
+          onClick={handleClose}
           type="button"
           className="flex gap-1 items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-fig-gray bg-fig-grey-mint hover:scale-110"
         >
