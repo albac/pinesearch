@@ -17,7 +17,7 @@ export const Buttons = ({ voice, slug }: Props) => {
         <div className="flex flex-wrap gap-3 justify-center items-center">
           <ShareBtn slug={slug} />
           <AudioButton voice={voice} />
-          <CommentsBtn />
+          {/* <CommentsBtn /> */}
         </div>
         {/* <ChatPdfBtn /> */}
       </div>
