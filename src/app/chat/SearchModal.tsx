@@ -155,7 +155,7 @@ export default function SearchModal({ closeModal }: ISearchModalProps) {
       onClick={closeModal}
     >
       <div
-        className="h-3/4 w-10/12 lg:w-2/3 bg-white rounded-3xl bg-opacity-100 z-20 flex flex-col items-center relative overflow-scroll"
+        className="h-3/4 w-10/12 lg:w-2/3 bg-white rounded-3xl bg-opacity-100 z-20 flex flex-col items-center relative overflow-hidden"
         /** this is kind of a hacky way to handle this click, but I don't want to waste a bunch of time making the backdrop a
          * a sibling element instead of a parent element.
          */
