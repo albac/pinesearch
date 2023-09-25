@@ -71,7 +71,7 @@ export default async function blogPage({ params }: BlogPageParams) {
             alt={`ia-image by ${params.slug}`}
           />
 
-          <Buttons voice={voice} />
+          <Buttons voice={voice} slug={params.slug} />
 
           <article
             className="

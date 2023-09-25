@@ -3,8 +3,6 @@ import PostItem from "./PostItem";
 import { Post } from "@/models";
 import SearchComponent from "./SearchComponent";
 
-const TAGS = ["Biochemistry", "Medicine", "Neuroscience", "Bioinformatics", "Micro Biology"];
-
 const getPosts = async () => {
   const { DataStore } = withSSRContext();
   const posts = await DataStore.query(Post, (c: any) => c, {
