@@ -1,4 +1,53 @@
 {
+  "local": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pinesearch-local-180855-authRole",
+      "UnauthRoleArn": "arn:aws:iam::849514089141:role/amplify-pinesearch-local-180855-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::849514089141:role/amplify-pinesearch-local-180855-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-pinesearch-local-180855-deployment",
+      "UnauthRoleName": "amplify-pinesearch-local-180855-unauthRole",
+      "StackName": "amplify-pinesearch-local-180855",
+      "StackId": "arn:aws:cloudformation:us-west-2:849514089141:stack/amplify-pinesearch-local-180855/81a1ddb0-5bf8-11ee-accb-02c47c3388e7",
+      "AmplifyAppId": "d6qm6fb1j4see"
+    },
+    "categories": {
+      "function": {
+        "PinesearchCheckURL": {
+          "searchEngineId": "4683b80a314924f72",
+          "secretsPathAmplifyAppId": "d6qm6fb1j4see",
+          "deploymentBucketName": "amplify-pinesearch-local-180855-deployment",
+          "s3Key": "amplify-builds/PinesearchCheckURL-454373354e63364b4b48-build.zip"
+        },
+        "zapierIntegration": {
+          "zaperActionDiscordId": "01H3N0XGT8R7H06WQR3P6NM1CX",
+          "zapierApiKey": "sk-ak-wuPjWos7XyXa4HOVOz6ObVrTs",
+          "deploymentBucketName": "amplify-pinesearch-local-180855-deployment",
+          "s3Key": "amplify-builds/zapierIntegration-5932356d7a376758394c-build.zip"
+        },
+        "PinesearchBlogCreator": {
+          "deploymentBucketName": "amplify-pinesearch-local-180855-deployment",
+          "s3Key": "amplify-builds/PinesearchBlogCreator-52394548526e66573356-build.zip"
+        },
+        "PinesearchUpdate": {
+          "deploymentBucketName": "amplify-pinesearch-local-180855-deployment",
+          "s3Key": "amplify-builds/PinesearchUpdate-7059754f37714e2b5171-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d6qm6fb1j4see",
+          "type": "cicd"
+        }
+      },
+      "auth": {
+        "pinesearchc776f9f1": {}
+      },
+      "storage": {
+        "pineblogs": {}
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-pinesearch-dev-101145-authRole",
