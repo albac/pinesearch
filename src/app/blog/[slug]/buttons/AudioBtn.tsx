@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { PlayIcon } from "../../../../../public/icons/PlayIcon";
 import { StopIcon } from "../../../../../public/icons/StopIcon";
+import { Storage } from "aws-amplify";
 
-export function AudioButton({ voice }: { voice: string }) {
-  const [audioElement] = useState(new Audio(voice));
+export function AudioButton({ slug }: { slug: string }) {
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement>(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
 
@@ -22,6 +23,17 @@ export function AudioButton({ voice }: { voice: string }) {
     setIsEnded(true);
   };
 
+  const getVoice = async () => {
+    const file = await Storage.get(slug + ".wav", {
+      level: "public"
+    });
+    setAudioElement(new Audio(file));
+  };
+
+  useEffect(() => {
+    getVoice();
+  }, []);
+
   useEffect(() => {
     audioElement.addEventListener("ended", handleAudioEnd);
 
@@ -36,6 +48,10 @@ export function AudioButton({ voice }: { voice: string }) {
       setIsPlaying(false);
     }
   }, [isEnded]);
+
+  if (!audioElement) {
+    return <div></div>;
+  }
 
   return (
     <div>

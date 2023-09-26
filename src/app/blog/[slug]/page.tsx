@@ -51,16 +51,15 @@ export async function generateMetadata({ params }: BlogPageParams) {
 export const revalidate: number = 30;
 
 export default async function blogPage({ params }: BlogPageParams) {
-  const [mdxFile, audio_src] = await Promise.allSettled([
-    Storage.get(`mdx/${params.slug}.md`, { level: "public" }),
-    Storage.get(`${params.slug}.wav`, { level: "public" })
+  const [mdxFile] = await Promise.allSettled([
+    Storage.get(`mdx/${params.slug}.md`, { level: "public" })
   ]);
 
-  if (audio_src.status === "fulfilled" && mdxFile.status === "fulfilled") {
-    const voice = audio_src.value;
-    const mdxSource = await (await fetch(mdxFile.value)).text();
+  const mdxSuccess = mdxFile.status === "fulfilled";
+  const mdxSource = mdxSuccess ? await (await fetch(mdxFile.value)).text() : false;
 
-    return (
+  return (
+    mdxSource && (
       <div className="py-4">
         <section className="w-[90%] max-w-[806px] mx-auto">
           <ImageClient
@@ -71,7 +70,7 @@ export default async function blogPage({ params }: BlogPageParams) {
             alt={`ia-image by ${params.slug}`}
           />
 
-          <Buttons voice={voice} slug={params.slug} />
+          <Buttons slug={params.slug} />
 
           <article
             className="
@@ -106,8 +105,6 @@ export default async function blogPage({ params }: BlogPageParams) {
           </article>
         </section>
       </div>
-    );
-  } else {
-    return <div>error</div>;
-  }
+    )
+  );
 }
