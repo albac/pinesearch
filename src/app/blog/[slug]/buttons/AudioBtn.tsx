@@ -3,7 +3,11 @@ import { PlayIcon } from "../../../../../public/icons/PlayIcon";
 import { StopIcon } from "../../../../../public/icons/StopIcon";
 import { Storage } from "aws-amplify";
 
-export function AudioButton({ slug }: { slug: string }) {
+interface Props {
+  slug: string;
+}
+
+export function AudioButton({ slug }: Props) {
   const [audioElement, setAudioElement] = useState<HTMLAudioElement>(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
