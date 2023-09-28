@@ -24,8 +24,14 @@ export default async function page() {
         <h1 className="font-poping font-bold text-base">
           Current auto generated blog posts: {posts.length}
         </h1>
-        {posts.map((post: any) => (
-          <PostItem key={post.s3url} post={post} />
+        {posts.map((post: Post) => (
+          <PostItem
+            key={post.s3url}
+            s3url={post.s3url!}
+            createdAt={post.createdAt!}
+            summary={post.summary!}
+            title={post.title!}
+          />
         ))}
       </div>
     </main>

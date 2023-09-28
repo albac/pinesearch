@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
 import { ChatPdfBtn, AudioButton, CommentsBtn, ShareBtn, LikeBtn } from "./buttons";
 
 interface Props {
@@ -8,9 +7,7 @@ interface Props {
 }
 
 export const Buttons = ({ slug }: Props) => {
-  const { isAuth } = useAuth();
-
-  return isAuth ? (
+  return (
     <>
       <div className="flex justify-between items-center mt-4">
         <div className="flex flex-wrap gap-3 justify-center items-center">
@@ -23,7 +20,5 @@ export const Buttons = ({ slug }: Props) => {
       </div>
       <hr className="mt-[10px] h-1" />
     </>
-  ) : (
-    <div></div>
   );
 };

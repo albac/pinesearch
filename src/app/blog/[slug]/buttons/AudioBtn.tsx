@@ -8,16 +8,18 @@ interface Props {
 }
 
 export function AudioButton({ slug }: Props) {
-  const [audioElement, setAudioElement] = useState<HTMLAudioElement>(new Audio());
+  const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
 
   const playAudio = () => {
+    if (!audioElement) return;
     audioElement.play();
     setIsPlaying(true);
   };
 
   const pauseAudio = () => {
+    if (!audioElement) return;
     audioElement.pause();
     setIsPlaying(false);
   };
@@ -39,6 +41,7 @@ export function AudioButton({ slug }: Props) {
   }, []);
 
   useEffect(() => {
+    if (!audioElement) return;
     audioElement.addEventListener("ended", handleAudioEnd);
 
     return () => {

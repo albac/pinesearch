@@ -8,3 +8,12 @@ export function formateDate(date: Date) {
 
   return `Published ${formattedDate}`;
 }
+
+export const uniqueArray = (array: any[]) => {
+  return Array.from(new Set(array));
+};
+
+export const arrayContains = (array: any[], value: any) => {
+  const unique = new Set(array);
+  return unique.has(value);
+};
