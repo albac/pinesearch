@@ -17,7 +17,7 @@ export const Buttons = ({ slug }: Props) => {
           <LikeBtn slug={slug} />
           <ShareBtn slug={slug} />
           <AudioButton slug={slug} />
-          {/* <CommentsBtn /> */}
+          <CommentsBtn />
         </div>
         {/* <ChatPdfBtn /> */}
       </div>

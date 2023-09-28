@@ -3,6 +3,7 @@ import { SortDirection, Storage, withSSRContext } from "aws-amplify";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { ImageClient } from "@/components/ImageClient";
 import { Buttons } from "./Buttons";
+import { Comments } from "./comments/Comments";
 
 interface StaticParams {
   slug: string;
@@ -60,8 +61,8 @@ export default async function blogPage({ params }: BlogPageParams) {
 
   return (
     mdxSource && (
-      <div className="py-4">
-        <section className="w-[90%] max-w-[806px] mx-auto">
+      <>
+        <section className="w-[90%] max-w-[806px] mx-auto py-4">
           <ImageClient
             className="w-full object-fills object-center h-[300px] rounded-md"
             width={300}
@@ -104,7 +105,10 @@ export default async function blogPage({ params }: BlogPageParams) {
             <MDXRemote source={mdxSource} />
           </article>
         </section>
-      </div>
+        <footer className="mt-5 w-[90%] max-w-[806px] mx-auto font-poping">
+          <Comments slug={params.slug} />
+        </footer>
+      </>
     )
   );
 }

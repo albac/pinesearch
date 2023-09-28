@@ -1,3 +1,15 @@
+type Comment {
+  author: String!
+  comment: String!
+  gpt_response: String!
+}
+
+type PostComments @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  s3url: String!
+  users_comments: [Comment!]!
+}
+
 type PostLikes @model @auth(rules: [{allow: public}]) {
   id: ID!
   s3url: String
