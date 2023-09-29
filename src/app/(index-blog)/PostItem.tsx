@@ -22,6 +22,8 @@ export default function PostItem({ title, summary, createdAt, s3url }: Props) {
       await DataStore.query(PostLikes, (postLikes: any) => postLikes.s3url.eq(s3url))
     )[0];
 
+    if (!postLikes) return;
+
     setTotalLikes(uniqueArray(postLikes.users_likes).length);
   };
 
