@@ -3,6 +3,7 @@ import { Amplify } from "aws-amplify";
 import "./globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import AuthenticatorProvider from "@/components/AuthenticatorProvider";
+import pinesearchLogo from "../../public/PinesearchLogo.png";
 
 if (process.env.DOPPLER_ENVIRONMENT === "stg") {
   awsconfig.oauth.redirectSignIn = "https://www.pinesearch.io/";
@@ -22,6 +23,19 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="twitter:card" content="Pinesearch Blog" />
+        <meta name="twitter:title" content={metadata.title} />
+        <meta name="twitter:description" content={metadata.description} />
+        <meta
+          name="twitter:image"
+          content="https://www.pinesearch.io/_next/image?url=%2FPinesearchLogo.png&w=256&q=75"
+        />
+        <meta
+          property="og:image"
+          content="https://www.pinesearch.io/_next/image?url=%2FPinesearchLogo.png&w=256&q=75"
+        />
+      </head>
       <body className="font-inter">
         <AuthenticatorProvider>
           <Navbar />

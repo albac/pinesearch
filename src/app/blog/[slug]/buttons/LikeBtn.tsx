@@ -4,22 +4,16 @@ import { PostLikes } from "@/models";
 import { useAuth } from "@/hooks/useAuth";
 import { HeartLikedIcon } from "../../../../../public/icons/HeartLikedIcon";
 import { HeartNotLikedIcon } from "../../../../../public/icons/HeartNotLikedIcon";
+import { arrayContains, uniqueArray } from "@/helpers";
+import { useRouter } from "next/navigation";
 
 interface Props {
   slug: string;
 }
 
-const uniqueArray = (array: any[]) => {
-  return Array.from(new Set(array));
-};
-
-const arrayContains = (array: any[], value: any) => {
-  const unique = new Set(array);
-  return unique.has(value);
-};
-
 export const LikeBtn = ({ slug }: Props) => {
   const { getUser } = useAuth();
+  const router = useRouter();
 
   const [totalLikes, setTotalLikes] = useState<number>(0);
   const [iLikesPost, setILikesPost] = useState(false);
@@ -57,6 +51,8 @@ export const LikeBtn = ({ slug }: Props) => {
   };
 
   const handleLike = async () => {
+    if (!user_sub) return router.push("/auth/sign-in");
+
     const currentPost = (
       await DataStore.query(PostLikes, (postLikes: any) => postLikes.s3url.eq(slug))
     )[0]!;
@@ -81,7 +77,11 @@ export const LikeBtn = ({ slug }: Props) => {
         className="flex gap-1 items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-fig-gray bg-fig-grey-mint hover:scale-110"
         onClick={handleLike}
       >
-        {iLikesPost ? <HeartLikedIcon /> : <HeartNotLikedIcon />}
+        {iLikesPost ? (
+          <HeartLikedIcon mainFill="#FF6647" borderFill="#E35336" />
+        ) : (
+          <HeartNotLikedIcon />
+        )}
         <span className="ml-2 font-bold">{totalLikes}</span>
       </button>
     </div>
