@@ -6,6 +6,7 @@ import { ImageClient } from "@/components/ImageClient";
 import { DataStore } from "aws-amplify";
 import { PostLikes } from "@/models";
 import { useEffect, useState } from "react";
+import { HeartLikedIcon } from "../../../public/icons/HeartLikedIcon";
 
 interface Props {
   title: string;
@@ -49,8 +50,8 @@ export default function PostItem({ title, summary, createdAt, s3url }: Props) {
           </div>
         </article>
         <div className="text-center absolute right-[10px]">
-          <p className="rounded-full bg-fig-grey-mint text-fig-gray px-[10px] py-[5px] font-poping inline-block">
-            Reactions: {totalLikes}
+          <p className="rounded-full bg-fig-grey-mint text-fig-gray px-[10px] py-[5px] font-poping flex items-center gap-2">
+            <HeartLikedIcon mainFill="#5a5858" borderFill="#302c2c" /> <span> {totalLikes}</span>
           </p>
         </div>
       </div>

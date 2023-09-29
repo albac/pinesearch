@@ -77,7 +77,11 @@ export const LikeBtn = ({ slug }: Props) => {
         className="flex gap-1 items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-fig-gray bg-fig-grey-mint hover:scale-110"
         onClick={handleLike}
       >
-        {iLikesPost ? <HeartLikedIcon /> : <HeartNotLikedIcon />}
+        {iLikesPost ? (
+          <HeartLikedIcon mainFill="#FF6647" borderFill="#E35336" />
+        ) : (
+          <HeartNotLikedIcon />
+        )}
         <span className="ml-2 font-bold">{totalLikes}</span>
       </button>
     </div>
