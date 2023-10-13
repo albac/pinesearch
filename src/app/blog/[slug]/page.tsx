@@ -3,6 +3,7 @@ import { SortDirection, Storage, withSSRContext } from "aws-amplify";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { ImageClient } from "@/components/ImageClient";
 import { Buttons } from "./Buttons";
+import { Metadata } from "next";
 
 interface StaticParams {
   slug: string;
@@ -44,8 +45,16 @@ export async function generateMetadata({ params }: BlogPageParams) {
 
   return {
     title: `PineSearch - ${post[0].title}`,
-    description: post[0].summary
-  };
+    description: post[0].summary,
+    other: {
+      "twitter:card": "summary",
+      "twitter:title": `PineSearch - ${post[0].title}`,
+      "twitter:description": post[0].summary,
+      "twitter:image": "https://www.pinesearch.io/_next/image?url=%2FPinesearchLogo.png&w=256&q=75",
+      "og:image": "https://www.pinesearch.io/_next/image?url=%2FPinesearchLogo.png&w=256&q=75",
+      "og:type": "website"
+    }
+  } as Metadata;
 }
 
 export const revalidate: number = 30;
