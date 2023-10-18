@@ -3,7 +3,6 @@ import { Amplify } from "aws-amplify";
 import "./globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import AuthenticatorProvider from "@/components/AuthenticatorProvider";
-import pinesearchLogo from "../../public/PinesearchLogo.png";
 import { Metadata } from "next";
 
 if (process.env.DOPPLER_ENVIRONMENT === "stg") {

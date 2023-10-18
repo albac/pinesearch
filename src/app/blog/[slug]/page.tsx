@@ -1,41 +1,33 @@
 import { Post as PostModel } from "@/models";
 import { SortDirection, Storage, withSSRContext } from "aws-amplify";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import { ImageClient } from "@/components/ImageClient";
-import { Buttons } from "./Buttons";
+import { ImageClient } from "@/components/Image/ImageClient";
+import { ButtonsBar } from "./ButtonsBar";
 import { Metadata } from "next";
+import { GenerateHtmlFromMdx } from "@/components/GenerateHtmlFromMdx";
 
 interface StaticParams {
   slug: string;
 }
 
-interface BlogPageParams {
+export async function generateStaticParams(): Promise<StaticParams[]> {
+  const { DataStore } = withSSRContext();
+
+  const posts = await DataStore.query(PostModel, (c: PostModel) => c, {
+    sort: (s: any) => s.updatedAt(SortDirection.DESCENDING)
+  });
+
+  return posts.map((post: PostModel) => ({
+    slug: post.s3url
+  }));
+}
+
+interface Props {
   params: {
     slug: string;
   };
 }
 
-interface Post {
-  title: string;
-  summary: string;
-  s3url: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export async function generateStaticParams(): Promise<StaticParams[]> {
-  const { DataStore } = withSSRContext();
-
-  const posts = await DataStore.query(PostModel, (c: Post) => c, {
-    sort: (s: any) => s.updatedAt(SortDirection.DESCENDING)
-  });
-
-  return posts.map((post: Post) => ({
-    slug: post.s3url
-  }));
-}
-
-export async function generateMetadata({ params }: BlogPageParams) {
+export async function generateMetadata({ params }: Props) {
   const { DataStore } = withSSRContext();
   const post = await DataStore.query(PostModel, (c: any) => c.s3url.eq(params.slug));
 
@@ -59,13 +51,9 @@ export async function generateMetadata({ params }: BlogPageParams) {
 
 export const revalidate: number = 30;
 
-export default async function blogPage({ params }: BlogPageParams) {
-  const [mdxFile] = await Promise.allSettled([
-    Storage.get(`mdx/${params.slug}.md`, { level: "public" })
-  ]);
-
-  const mdxSuccess = mdxFile.status === "fulfilled";
-  const mdxSource = mdxSuccess ? await (await fetch(mdxFile.value)).text() : false;
+export default async function blogPage({ params }: Props) {
+  const mdxFile = await Storage.get(`mdx/${params.slug}.md`, { level: "public" });
+  const mdxSource = await (await fetch(mdxFile)).text();
 
   return (
     mdxSource && (
@@ -79,39 +67,9 @@ export default async function blogPage({ params }: BlogPageParams) {
             alt={`ia-image by ${params.slug}`}
           />
 
-          <Buttons slug={params.slug} />
+          <ButtonsBar slug={params.slug} />
 
-          <article
-            className="
-          max-w-none
-          overflow-hidden
-          prose
-          prose-headings:font-poping
-          prose-p:font-pt_serif
-          prose-headings:leading-tight
-          prose-h1:text-3xl
-          prose-h1:text-center
-          prose-h1:mb-10
-          prose-h2:text-[27px]
-          prose-h2:my-[10px]
-          prose-p:m-0
-          prose-p:mb-4
-          prose-p:text-lg 
-          lg:prose-p:text-xl
-          lg:prose-p:mb-5
-          md:prose-h1:text-4xl
-          lg:prose-h2:text-3xl
-          lg:prose-h1:text-5xl
-          px-4
-          py-4
-          sm:px-8
-          md:py-6
-          md:px-12
-          lg:py-8
-          lg:px-16"
-          >
-            <MDXRemote source={mdxSource} />
-          </article>
+          <GenerateHtmlFromMdx source={mdxSource} />
         </section>
       </div>
     )

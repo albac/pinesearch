@@ -2,7 +2,7 @@
 
 import { formateDate, uniqueArray } from "@/helpers";
 import Link from "next/link";
-import { ImageClient } from "@/components/ImageClient";
+import { ImageClient } from "@/components/Image/ImageClient";
 import { DataStore } from "aws-amplify";
 import { PostLikes } from "@/models";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ interface Props {
   createdAt: string;
   s3url: string;
 }
+
 export default function PostItem({ title, summary, createdAt, s3url }: Props) {
   const [totalLikes, setTotalLikes] = useState<number>(0);
 
@@ -33,7 +34,7 @@ export default function PostItem({ title, summary, createdAt, s3url }: Props) {
 
   return (
     <Link className="block" href={`/blog/${s3url}`}>
-      <div className="hover:shadow-md hover:cursor-pointer relative flex">
+      <div className="hover:shadow-md hover:bg-fig-grey-mint hover:cursor-pointer relative flex rounded-lg transition-colors">
         <article className="lg:flex items-center gap-5  p-4 transition-colors">
           <ImageClient
             className="rounded-lg w-[180px] h-[180px] block"
@@ -44,14 +45,13 @@ export default function PostItem({ title, summary, createdAt, s3url }: Props) {
           />
           <div className="mt-3 lg:mt-0">
             <p className="text-base text-gray-400 font-poping">
-              {" "}
               {formateDate(new Date(createdAt))}
             </p>
             <h2 className="font-semibold text-[22px] font-poping leading-tight">{title}</h2>
             <p className="mt-2 font-pt_serif">{summary}</p>
           </div>
         </article>
-        <div className="text-center absolute right-[10px]">
+        <div className="text-center absolute right-[10px] top-[10px]">
           <p className="rounded-full bg-fig-grey-mint text-fig-gray px-[10px] py-[5px] font-poping flex items-center gap-2">
             <HeartLikedIcon mainFill="#5a5858" borderFill="#302c2c" /> <span> {totalLikes}</span>
           </p>

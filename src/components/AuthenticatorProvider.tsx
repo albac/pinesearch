@@ -1,16 +1,10 @@
 "use client";
 
+import { Amplify } from "aws-amplify";
 import { Authenticator } from "@aws-amplify/ui-react";
 import awsconfig from "@/aws-exports";
-import { Amplify, AuthModeStrategyType } from "aws-amplify";
 
-Amplify.configure({
-  ...awsconfig,
-  ssr: true,
-  DataStore: {
-    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH
-  }
-});
+Amplify.configure(awsconfig);
 
 interface Props {
   children: React.ReactNode;
