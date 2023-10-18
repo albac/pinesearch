@@ -1,12 +1,12 @@
 "use client";
 
-import { ChatPdfBtn, AudioButton, CommentsBtn, ShareBtn, LikeBtn } from "./buttons";
+import { AudioButton, ShareBtn, LikeBtn } from "./buttons/index";
 
 interface Props {
   slug: string;
 }
 
-export const Buttons = ({ slug }: Props) => {
+export const ButtonsBar = ({ slug }: Props) => {
   return (
     <>
       <div className="flex justify-between items-center mt-4">
