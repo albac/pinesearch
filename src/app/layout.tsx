@@ -31,6 +31,9 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <script src="https://js.recurly.com/v4/recurly.js"></script>
+      </head>
       <body className="font-inter">
         <AuthenticatorProvider>
           <Navbar />
