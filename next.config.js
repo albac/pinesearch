@@ -1,6 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // reactStrictMode: true,
+  headers: async () => {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400"
+          }
+        ]
+      }
+    ];
+  },
   env: {
     USER_BRANCH: process.env.USER_BRANCH,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
@@ -13,10 +26,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname:
-          process.env.DOPPLER_ENVIRONMENT === "stg"
-            ? "pineblogs101145-dev.s3.us-west-2.amazonaws.com"
-            : "pineblogs180855-local.s3.us-west-2.amazonaws.com",
+        hostname: "pineblogs101145-dev.s3.us-west-2.amazonaws.com",
+        pathname: "/public/**"
+      },
+      {
+        protocol: "https",
+        hostname: "pineblogs180855-local.s3.us-west-2.amazonaws.com",
         port: "",
         pathname: "/public/**"
       }
