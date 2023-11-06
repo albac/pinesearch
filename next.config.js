@@ -13,10 +13,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname:
-          process.env.DOPPLER_ENVIRONMENT === "stg"
-            ? "pineblogs101145-dev.s3.us-west-2.amazonaws.com"
-            : "pineblogs180855-local.s3.us-west-2.amazonaws.com",
+        hostname: "pineblogs101145-dev.s3.us-west-2.amazonaws.com",
+        pathname: "/public/**"
+      },
+      {
+        protocol: "https",
+        hostname: "pineblogs180855-local.s3.us-west-2.amazonaws.com",
         port: "",
         pathname: "/public/**"
       }
