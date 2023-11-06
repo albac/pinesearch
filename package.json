@@ -12,15 +12,8 @@
     "@aws-amplify/ui-react": "4.6.4",
     "@aws-amplify/ui-react-storage": "^2.0.1",
     "@pinecone-database/pinecone": "^0.1.6",
-    "@types/aws-sdk": "2.7.0",
-    "@types/node": "20.3.1",
-    "@types/react": "18.2.13",
-    "@types/react-dom": "18.2.6",
-    "autoprefixer": "10.4.14",
     "aws-amplify": "5.2.7",
     "encoding": "^0.1.13",
-    "eslint": "8.43.0",
-    "eslint-config-next": "13.4.6",
     "langchain": "^0.0.95",
     "next": "^13.4.19",
     "next-mdx-remote": "^4.4.1",
@@ -29,11 +22,18 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-spinners": "^0.13.8",
-    "sharp": "^0.32.1",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.1.3"
+    "sharp": "^0.32.1"
   },
   "devDependencies": {
+    "eslint": "8.43.0",
+    "eslint-config-next": "13.4.6",
+    "typescript": "5.1.3",
+    "tailwindcss": "3.3.2",
+    "autoprefixer": "10.4.14",
+    "@types/aws-sdk": "2.7.0",
+    "@types/node": "20.3.1",
+    "@types/react": "18.2.13",
+    "@types/react-dom": "18.2.6",
     "@tailwindcss/typography": "^0.5.9",
     "prettier": "^2.8.8"
   }
