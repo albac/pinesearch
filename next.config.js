@@ -1,6 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // reactStrictMode: true,
+  headers: async () => {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400"
+          }
+        ]
+      }
+    ];
+  },
   env: {
     USER_BRANCH: process.env.USER_BRANCH,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
